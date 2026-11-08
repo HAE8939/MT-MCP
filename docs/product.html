@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="MT-MCP — 公司内部共用的 MCP 服务。接入一次即可使用临时图床、机位标注与设计提示词库。">
+<title>MT-MCP · 产品介绍</title>
+<style>
+/* Tokens · HAE Creator Design System V0.3 §2–4（铁锈默认；与 MT-Visual-Language index 同族） */
+:root{
+  --canvas:#F4F1EA; --surface:#FAF8F3; --sunken:#EDEAE2;
+  --ink:#2B2A26; --sec:#6E6A5E; --dis:#A8A294;
+  --accent:#B7472A; --accent-ink:#7A2E1A; --tint:#F3E3DB; --on-accent:#FFFFFF;
+  --border:#E7E1D6; --border-strong:#D8D0C1;
+  --success:#3E7C5B; --warning:#8A5F1B; --danger:#A32821;
+  --r-out:10px; --r-in:6px;
+  --s4:4px; --s8:8px; --s12:12px; --s16:16px; --s24:24px; --s32:32px; --s48:48px; --s64:64px; --s72:72px; --s96:96px;
+  --ui:"Inter","PingFang SC","Microsoft YaHei","HarmonyOS Sans SC","Noto Sans SC",system-ui,sans-serif;
+  --mono:"JetBrains Mono","Maple Mono","Fira Code",ui-monospace,SFMono-Regular,monospace;
+}
+[data-theme="dark"]{
+  --canvas:#16130F; --surface:#1E1A15; --sunken:#13100C;
+  --ink:#EDE9E1; --sec:#A8A294; --dis:#5C574C;
+  --accent:#B7472A; --accent-ink:#D9754F; --tint:rgba(183,71,42,.16); --on-accent:#FFFFFF;
+  --border:#2A251E; --border-strong:#3A342B;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--canvas);color:var(--ink);font:15px/1.75 var(--ui);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  transition:background-color 200ms ease-out,color 200ms ease-out;
+}
+a{color:var(--accent-ink);text-decoration:none;font-weight:600}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1080px,calc(100% - 48px));margin-inline:auto}
+.mono{font-family:var(--mono)}
+:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+/* nav */
+nav{
+  position:sticky;top:0;z-index:20;
+  background:color-mix(in srgb,var(--canvas) 92%,transparent);
+  border-bottom:1px solid var(--border);
+}
+.nav__in{height:64px;display:flex;align-items:center;justify-content:space-between;gap:var(--s24)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink);letter-spacing:-.01em;text-decoration:none}
+.brand:hover{text-decoration:none}
+.brand .mark{width:12px;height:12px;border-radius:3px;background:var(--accent);flex:none}
+.nav__links{display:flex;gap:var(--s24);color:var(--sec);font-size:13px}
+.nav__links a{color:inherit;font-weight:400;text-decoration:none}
+.nav__links a:hover{color:var(--ink);text-decoration:none}
+.nav__right{display:flex;align-items:center;gap:var(--s12)}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:8px 16px;min-height:38px;
+  border:1px solid var(--border);border-radius:var(--r-in);
+  background:var(--surface);color:var(--ink);font:600 14px/1 var(--ui);cursor:pointer;
+  text-decoration:none;
+  transition:border-color 120ms ease-out,filter 120ms ease-out,background-color 120ms ease-out;
+}
+.btn:hover{border-color:var(--border-strong);text-decoration:none}
+.btn:active{filter:brightness(.96)}
+.btn--primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn--primary:hover{filter:brightness(.96);border-color:var(--accent);text-decoration:none}
+.toggle{width:38px;height:38px;padding:0;justify-content:center;font-size:15px;color:var(--sec)}
+.toggle::before{content:"\26FE"}
+[data-theme="dark"] .toggle::before{content:"\2600"}
+
+/* hero */
+.hero{padding:var(--s96) 0 var(--s72);border-bottom:1px solid var(--border)}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.12em;color:var(--accent-ink)}
+h1{font-size:32px;line-height:1.3;letter-spacing:-.02em;font-weight:600;max-width:14em;margin:16px 0}
+.lead{font-size:17px;line-height:1.7;color:var(--sec);max-width:38em;margin-bottom:var(--s32)}
+.actions{display:flex;gap:var(--s12);flex-wrap:wrap}
+.facts{
+  margin-top:var(--s48);padding-top:var(--s24);border-top:1px solid var(--border);
+  display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s24);
+}
+.fact .k{font:600 12px/1 var(--mono);letter-spacing:.06em;color:var(--accent-ink);margin-bottom:8px}
+.fact .v{font-size:14px;line-height:1.65;color:var(--ink);font-weight:600}
+.fact .s{font-size:13px;color:var(--sec);margin-top:4px;font-weight:400;line-height:1.6}
+
+/* section shell */
+section{padding:var(--s72) 0;border-bottom:1px solid var(--border)}
+.head{
+  display:grid;grid-template-columns:auto 1fr;gap:var(--s8) var(--s24);
+  align-items:baseline;margin-bottom:var(--s48);
+}
+.head .k{font:600 12px/1.5 var(--mono);letter-spacing:.08em;color:var(--accent-ink)}
+.head h2{font-size:20px;font-weight:600;letter-spacing:-.01em;margin-bottom:6px}
+.head p{color:var(--sec);max-width:40em;font-size:14px;line-height:1.75}
+
+/* capability cards */
+.caps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--s16)}
+.cap{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-out);
+  padding:var(--s24);display:flex;flex-direction:column;gap:var(--s12);
+}
+.cap .num{font:600 12px/1 var(--mono);color:var(--accent-ink);letter-spacing:.04em}
+.cap h3{font-size:15px;font-weight:600}
+.cap p{font-size:13.5px;color:var(--sec);line-height:1.7;flex:1}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:var(--s8)}
+.chip{
+  display:inline-flex;align-items:center;padding:4px 10px;border-radius:var(--r-in);
+  font:400 12px/1.2 var(--mono);background:var(--tint);color:var(--accent-ink);
+}
+
+/* tool table */
+.panel{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-out);
+  padding:var(--s24);margin-top:var(--s24);
+}
+.panel + .panel{margin-top:var(--s16)}
+.panel .capline{font:600 12px/1 var(--mono);letter-spacing:.07em;color:var(--sec);margin-bottom:var(--s16)}
+.panel h3{font-size:15px;font-weight:600;margin-bottom:6px}
+.panel .desc{font-size:13.5px;color:var(--sec);line-height:1.7;margin-bottom:var(--s16);max-width:48em}
+.tablewrap{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{
+  text-align:left;font:600 12px var(--mono);letter-spacing:.05em;color:var(--sec);
+  text-transform:uppercase;padding:var(--s12) var(--s12) var(--s8);border-bottom:1px solid var(--border);
+}
+tbody td{padding:var(--s12);border-bottom:1px solid var(--border);color:var(--ink);vertical-align:top;line-height:1.6}
+tbody tr:last-child td{border-bottom:0}
+tbody td.meta{color:var(--sec);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody td code, .inline-code{
+  font-family:var(--mono);font-size:12.5px;background:var(--sunken);
+  border-radius:var(--r-in);padding:2px 6px;color:var(--ink);
+}
+tbody tr:hover{background:var(--tint)}
+
+/* prompt list */
+.prompts{display:grid;gap:0;border:1px solid var(--border);border-radius:var(--r-out);overflow:hidden;background:var(--surface)}
+.prompt{
+  display:grid;grid-template-columns:56px 1fr auto;gap:var(--s16);align-items:center;
+  padding:14px var(--s16);border-bottom:1px solid var(--border);
+}
+.prompt:last-child{border-bottom:0}
+.prompt:hover{background:var(--tint)}
+.prompt .idx{font:600 12px/1 var(--mono);color:var(--accent-ink)}
+.prompt .title{font-size:14px;font-weight:600}
+.prompt .slug{font:12px/1.4 var(--mono);color:var(--sec);margin-top:4px}
+.prompt .cat{
+  font:600 12px/1 var(--mono);color:var(--accent-ink);background:var(--tint);
+  border-radius:var(--r-in);padding:4px 10px;white-space:nowrap;
+}
+
+/* connect */
+.connect{display:grid;grid-template-columns:1fr 1fr;gap:var(--s16)}
+.stepcard{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-out);padding:var(--s24);
+}
+.stepcard .n{font:600 12px/1 var(--mono);color:var(--accent-ink);margin-bottom:10px}
+.stepcard h3{font-size:15px;font-weight:600;margin-bottom:8px}
+.stepcard ol{margin:0;padding-left:1.2em;color:var(--sec);font-size:13.5px;line-height:1.75}
+.stepcard ol li + li{margin-top:4px}
+.stepcard .path{
+  margin-top:var(--s16);padding:10px 12px;background:var(--sunken);border-radius:var(--r-in);
+  font:13px/1.5 var(--mono);color:var(--ink);word-break:break-all;
+}
+
+.codeblock{
+  margin-top:var(--s24);background:var(--sunken);border:1px solid var(--border);
+  border-radius:var(--r-out);overflow:hidden;
+}
+.codeblock .bar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface);
+  font:600 12px/1 var(--mono);letter-spacing:.06em;color:var(--sec);
+}
+.codeblock pre{
+  margin:0;padding:var(--s16) var(--s24);overflow-x:auto;
+  font:13.5px/1.65 var(--mono);color:var(--ink);white-space:pre;
+}
+.copybtn{
+  appearance:none;border:0;background:transparent;color:var(--accent-ink);
+  font:600 12px var(--ui);cursor:pointer;padding:4px 8px;border-radius:var(--r-in);
+}
+.copybtn:hover{background:var(--tint)}
+
+.note-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s16)}
+.note{
+  border-left:3px solid var(--accent);background:var(--surface);
+  border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border);
+  border-radius:0 var(--r-out) var(--r-out) 0;padding:var(--s16) var(--s24);
+}
+.note h3{font-size:14px;font-weight:600;margin-bottom:6px}
+.note p{font-size:13.5px;color:var(--sec);line-height:1.7}
+
+.cta{text-align:left;padding:var(--s96) 0;border-bottom:none}
+.cta h2{font-size:24px;font-weight:600;letter-spacing:-.01em;margin-bottom:12px;max-width:16em}
+.cta p{color:var(--sec);max-width:40em;margin-bottom:var(--s24);line-height:1.75}
+
+footer{padding:var(--s48) 0 var(--s72);color:var(--sec);font-size:12.5px;border-top:1px solid var(--border)}
+.foot{display:flex;justify-content:space-between;gap:var(--s24);flex-wrap:wrap}
+
+@media(max-width:860px){
+  .nav__links{display:none}
+  .hero{padding:var(--s72) 0 var(--s48)}
+  h1{font-size:26px}
+  .facts,.caps,.connect,.note-grid{grid-template-columns:1fr}
+  .prompt{grid-template-columns:40px 1fr;gap:var(--s12)}
+  .prompt .cat{grid-column:2;justify-self:start}
+  section{padding:var(--s48) 0}
+  .cta{padding:var(--s64) 0}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap nav__in">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span>MT-MCP</a>
+    <div class="nav__links">
+      <a href="#about">是什么</a>
+      <a href="#caps">能力</a>
+      <a href="#prompts">提示词</a>
+      <a href="#connect">接入</a>
+    </div>
+    <div class="nav__right">
+      <a class="btn btn--primary" href="#connect">开始接入</a>
+      <button class="btn toggle" id="themeBtn" type="button" aria-label="切换明暗主题"></button>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+  <!-- Hero -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="eyebrow">MT-MCP · MODEL CONTEXT PROTOCOL</div>
+      <h1>公司共用的 MCP 工具箱。</h1>
+      <p class="lead">在 Cursor、千问办公等客户端里配置一次地址与令牌，就能调用临时图床、机位标注与设计提示词库。服务常开在局域网；之后新增工具，一般只需刷新列表。</p>
+      <div class="actions">
+        <a class="btn btn--primary" href="#connect">查看接入方式</a>
+        <a class="btn" href="#caps">浏览能力</a>
+      </div>
+      <div class="facts" id="about">
+        <div class="fact">
+          <div class="k">定位</div>
+          <div class="v">共享 MCP Hub</div>
+          <div class="s">多客户端共用同一套工具，一次接入即可使用全部已启用能力。</div>
+        </div>
+        <div class="fact">
+          <div class="k">入口</div>
+          <div class="v mono">192.168.1.135:8787</div>
+          <div class="s">MCP 端点 <span class="inline-code">/mcp</span> · 健康检查 <span class="inline-code">/health</span></div>
+        </div>
+        <div class="fact">
+          <div class="k">鉴权</div>
+          <div class="v">Bearer 共享令牌</div>
+          <div class="s">请求头携带令牌；勿写入查询字符串，勿发到公开渠道。</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Capabilities -->
+  <section id="caps">
+    <div class="wrap">
+      <div class="head">
+        <div class="k">§ 01</div>
+        <div>
+          <h2>现在能做什么</h2>
+          <p>连上后一次拿到全部已启用工具。Hub 不做意图路由——由模型根据工具名与描述自行选择并调用。</p>
+        </div>
+      </div>
+
+      <div class="caps">
+        <article class="cap">
+          <div class="num">01 · IMAGEBED</div>
+          <h3>临时图床</h3>
+          <p>把图片上传到公司临时 COS，拿到约 1 天有效的公网 URL。适合跨模型传图与临时预览，不当永久图床。</p>
+          <div class="tools">
+            <span class="chip">imagebed_upload</span>
+            <span class="chip">imagebed_list</span>
+            <span class="chip">imagebed_delete</span>
+          </div>
+        </article>
+        <article class="cap">
+          <div class="num">02 · CAMERA</div>
+          <h3>机位标注</h3>
+          <p>根据本地项目的楼层与图片清单，生成可离线打开的标注 HTML。人手点选后导出 JSON；后续导览不再走本服务。</p>
+          <div class="tools">
+            <span class="chip">camera_annot_validate_bootstrap</span>
+            <span class="chip">camera_annot_build_html</span>
+          </div>
+        </article>
+        <article class="cap">
+          <div class="num">03 · DESIGN</div>
+          <h3>设计提示词</h3>
+          <p>只读列出仓库内 Markdown 提示词，或按 id / slug 取正文。当前入库 7 条，覆盖效果图、情绪板、机位与软装等。</p>
+          <div class="tools">
+            <span class="chip">design_list_prompts</span>
+            <span class="chip">design_get_prompt</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="panel">
+        <div class="capline">TOOLS · 临时图床</div>
+        <h3>上传、列出、删除</h3>
+        <p class="desc">仅 jpeg / png / gif / webp；默认单张最大 8&nbsp;MiB。可用 base64 或公网 https 源地址上传。返回 URL 约 1 天后由桶生命周期清理。</p>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr><th>工具</th><th>作用</th><th class="meta">要点</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>imagebed_upload</code></td>
+                <td>上传一张图，返回公网 URL</td>
+                <td class="meta">filename 必填</td>
+              </tr>
+              <tr>
+                <td><code>imagebed_list</code></td>
+                <td>按前缀列出对象</td>
+                <td class="meta">默认最多 50</td>
+              </tr>
+              <tr>
+                <td><code>imagebed_delete</code></td>
+                <td>按对象键删除</td>
+                <td class="meta">须在图床前缀内</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="capline">TOOLS · 机位标注</div>
+        <h3>先校验，再生成离线 HTML</h3>
+        <p class="desc">服务端不读你的本地路径；平面图与图片以相对路径写入页面。推荐：先 <code class="inline-code">validate</code>，再 <code class="inline-code">build_html</code>，把 HTML 存到项目 <code class="inline-code">01_机位标注/</code>，浏览器里点选后导出 JSON。</p>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr><th>工具</th><th>作用</th><th class="meta">模式</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>camera_annot_validate_bootstrap</code></td>
+                <td>检查楼层 / 图片清单，返回建议文件名与警告</td>
+                <td class="meta">不产出 HTML</td>
+              </tr>
+              <tr>
+                <td><code>camera_annot_build_html</code></td>
+                <td>生成完整标注页，默认可附空 JSON 脚手架</td>
+                <td class="meta">pano / effect</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="capline">TOOLS · 设计提示词</div>
+        <h3>列出元数据，按需取正文</h3>
+        <p class="desc"><code class="inline-code">slug</code> 是不带 <code class="inline-code">.md</code> 的相对路径（如 <code class="inline-code">floorplan/07_color_plan</code>）。只填 id 或 slug 其一即可。</p>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr><th>工具</th><th>作用</th><th class="meta">返回</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>design_list_prompts</code></td>
+                <td>列出全部提示词元数据</td>
+                <td class="meta">id / title / tags…</td>
+              </tr>
+              <tr>
+                <td><code>design_get_prompt</code></td>
+                <td>按 id 或 slug 取一条</td>
+                <td class="meta">Prompt · Notes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prompts -->
+  <section id="prompts">
+    <div class="wrap">
+      <div class="head">
+        <div class="k">§ 02</div>
+        <div>
+          <h2>设计提示词库 · 当前 7 条</h2>
+          <p>用 <span class="inline-code">design_list_prompts</span> 浏览，用 <span class="inline-code">design_get_prompt</span> 取正文。分类即目录名。</p>
+        </div>
+      </div>
+
+      <div class="prompts" role="list">
+        <div class="prompt" role="listitem">
+          <div class="idx">01</div>
+          <div>
+            <div class="title">通用效果图返推大师</div>
+            <div class="slug">rendering/01_render_reverse_master</div>
+          </div>
+          <span class="cat">rendering</span>
+        </div>
+        <div class="prompt" role="listitem">
+          <div class="idx">02</div>
+          <div>
+            <div class="title">效果图设计提示词</div>
+            <div class="slug">rendering/02_render_design_prompt</div>
+          </div>
+          <span class="cat">rendering</span>
+        </div>
+        <div class="prompt" role="listitem">
+          <div class="idx">03</div>
+          <div>
+            <div class="title">情绪板大师</div>
+            <div class="slug">moodboard/03_moodboard_master</div>
+          </div>
+          <span class="cat">moodboard</span>
+        </div>
+        <div class="prompt" role="listitem">
+          <div class="idx">04</div>
+          <div>
+            <div class="title">九宫格分镜图</div>
+            <div class="slug">camera/04_nine_grid_storyboard</div>
+          </div>
+          <span class="cat">camera</span>
+        </div>
+        <div class="prompt" role="listitem">
+          <div class="idx">05</div>
+          <div>
+            <div class="title">换角度</div>
+            <div class="slug">camera/05_change_angle</div>
+          </div>
+          <span class="cat">camera</span>
+        </div>
+        <div class="prompt" role="listitem">
+          <div class="idx">06</div>
+          <div>
+            <div class="title">软装搭配</div>
+            <div class="slug">styling/06_soft_furnishing</div>
+          </div>
+          <span class="cat">styling</span>
+        </div>
+        <div class="prompt" role="listitem">
+          <div class="idx">07</div>
+          <div>
+            <div class="title">彩平图提示词生成</div>
+            <div class="slug">floorplan/07_color_plan</div>
+          </div>
+          <span class="cat">floorplan</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Connect -->
+  <section id="connect">
+    <div class="wrap">
+      <div class="head">
+        <div class="k">§ 03</div>
+        <div>
+          <h2>怎么接入</h2>
+          <p>设备须能访问 NAS 局域网 <span class="inline-code">192.168.1.135</span>。传输选 <span class="inline-code">http</span> / <span class="inline-code">streamable-http</span>。令牌向管理员索取，本文只用占位符。</p>
+        </div>
+      </div>
+
+      <div class="connect">
+        <article class="stepcard">
+          <div class="n">01 · CURSOR</div>
+          <h3>Settings → MCP</h3>
+          <ol>
+            <li>打开 MCP 设置，或编辑 <span class="inline-code">mcp.json</span></li>
+            <li>合并下方片段中的 <span class="inline-code">mcpServers</span></li>
+            <li>启用后应看到 7 个工具：3 个图床、2 个机位、2 个提示词</li>
+          </ol>
+        </article>
+        <article class="stepcard">
+          <div class="n">02 · 千问办公</div>
+          <h3>自定义 / 远程 MCP</h3>
+          <ol>
+            <li>新增远程 MCP 服务</li>
+            <li>URL 填下方入口地址</li>
+            <li>Header 加 <span class="inline-code">Authorization: Bearer &lt;令牌&gt;</span></li>
+            <li>可选传输时选 HTTP / streamable-http</li>
+          </ol>
+          <div class="path">http://192.168.1.135:8787/mcp</div>
+        </article>
+      </div>
+
+      <div class="codeblock">
+        <div class="bar">
+          <span>MCP.JSON · 通用片段</span>
+          <button class="copybtn" type="button" data-copy="mcp-json">复制</button>
+        </div>
+        <pre id="mcp-json">{
+  "mcpServers": {
+    "MT-MCP": {
+      "url": "http://192.168.1.135:8787/mcp",
+      "headers": {
+        "Authorization": "Bearer &lt;MCP_AUTH_TOKEN&gt;"
+      }
+    }
+  }
+}</pre>
+      </div>
+
+      <div class="codeblock" style="margin-top:var(--s16)">
+        <div class="bar">
+          <span>HEALTH · 连通性自检</span>
+          <button class="copybtn" type="button" data-copy="health-cmd">复制</button>
+        </div>
+        <pre id="health-cmd">curl -s http://192.168.1.135:8787/health</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notes -->
+  <section id="notes">
+    <div class="wrap">
+      <div class="head">
+        <div class="k">§ 04</div>
+        <div>
+          <h2>使用前请知道</h2>
+          <p>这些约束保证工具好用、也保证公司资产安全。与运维无关的部分，都写在这里。</p>
+        </div>
+      </div>
+      <div class="note-grid">
+        <div class="note">
+          <h3>局域网可达</h3>
+          <p>设备须能访问 <span class="inline-code">192.168.1.135</span>。外网需先连公司 VPN（若有）。不要把 8787 暴露到公网。</p>
+        </div>
+        <div class="note">
+          <h3>令牌只放 Header</h3>
+          <p>用 <span class="inline-code">Authorization: Bearer …</span> 或 <span class="inline-code">X-API-Key</span>。查询字符串会被拒绝。令牌仅公司内传阅。</p>
+        </div>
+        <div class="note">
+          <h3>图约一天过期</h3>
+          <p>临时图床适合预览与跨模型传图。勿当永久图床，勿上传密钥、证件或未公开敏感截图。</p>
+        </div>
+        <div class="note">
+          <h3>机位页可离线</h3>
+          <p>生成 HTML 后与 MCP 脱钩。标注与导出都在本地浏览器完成；JSON 之后交给其他流程即可。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2>配置一次，工具随时在手边。</h2>
+      <p>把入口与令牌写进客户端，刷新工具列表即可开始。详细参数与调用示例见同目录《MT-MCP 接入说明》。</p>
+      <div class="actions">
+        <a class="btn btn--primary" href="#connect">回到接入</a>
+        <a class="btn" href="#caps">再看能力</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>MT-MCP · 面向使用者的产品介绍</span>
+    <span>视觉语言遵循 HAE Creator Design System V0.3</span>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('themeBtn');
+  themeBtn.addEventListener('click', () => {
+    root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+
+  document.querySelectorAll('.copybtn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const id = btn.getAttribute('data-copy');
+      const el = document.getElementById(id);
+      if (!el) return;
+      const text = el.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        const prev = btn.textContent;
+        btn.textContent = '已复制';
+        setTimeout(() => { btn.textContent = prev; }, 1200);
+      } catch (_) {
+        btn.textContent = '复制失败';
+        setTimeout(() => { btn.textContent = '复制'; }, 1200);
+      }
+    });
+  });
+</script>
+</body>
+</html>

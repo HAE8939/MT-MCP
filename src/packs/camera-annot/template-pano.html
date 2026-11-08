@@ -1,0 +1,2807 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>__PAGE_TITLE__</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2322262a'/%3E%3Ctext x='16' y='21.5' font-family='monospace' font-size='13' font-weight='600' fill='%23f7f3e8' text-anchor='middle'%3E21%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --font:"PingFang SC","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Cascadia Mono","SF Mono","JetBrains Mono",Consolas,"Courier New",monospace;
+  --paper:#f4f1e9;
+  --panel:#fcfaf5;
+  --panel-2:#f3efe5;
+  --desk:#e7e2d7;
+  --ink:#22262a;
+  --ink-2:#4b5054;
+  --muted:#8a8b82;
+  --line:#e5dfd2;
+  --line-2:#d5cebd;
+  --accent:#b0543c;
+  --accent-2:#8e3f2c;
+  --accent-soft:#f5e6e0;
+  --green:#2e5b4c;
+  --green-soft:#e3ece7;
+  --amber:#a9772a;
+  --amber-soft:#f6ecd7;
+  --danger:#a33a2e;
+  --shadow-1:0 1px 2px rgba(50,40,20,.06),0 10px 26px -18px rgba(50,40,20,.4);
+  --shadow-2:0 18px 50px -20px rgba(50,40,20,.45),0 0 0 1px rgba(120,105,80,.14);
+  --r:9px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font:13px/1.5 var(--font);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer}
+svg{display:block}
+::selection{background:#ecd3ca}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- app frame ---------- */
+.app{height:100%;display:grid;grid-template-rows:56px 46px minmax(0,1fr);min-height:520px;overflow:hidden}
+.topbar{position:relative;z-index:30;display:flex;align-items:center;gap:16px;padding:0 14px 0 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;flex:none}
+.logo{width:34px;height:34px;border-radius:9px;background:var(--ink);color:#f7f3e8;display:grid;place-items:center;font:600 13px/1 var(--mono);letter-spacing:.02em;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.bname{font-size:14px;font-weight:600;letter-spacing:.02em;line-height:1.15}
+.bsub{font-size:10.5px;color:var(--muted);letter-spacing:.06em;margin-top:2px}
+.progress{display:flex;flex-direction:column;gap:4px;width:190px;flex:none;margin-left:4px}
+.ptext{display:flex;align-items:baseline;gap:3px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ptext b{font:600 12px var(--mono);color:var(--ink)}
+.ptext .plabel{margin-left:5px;letter-spacing:.04em}
+.pbar{height:3px;border-radius:3px;background:#ded8c9;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#c9765d);border-radius:3px;transition:width .35s ease}
+.actions{margin-left:auto;display:flex;align-items:center;gap:4px}
+.vsep{width:1px;height:20px;background:var(--line-2);margin:0 5px;flex:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:30px;padding:0 11px;border-radius:8px;border:1px solid var(--line-2);background:#fffdf8;font-size:12px;font-weight:500;color:var(--ink-2);transition:background .15s,border-color .15s,color .15s}
+.btn:hover{background:#f6f1e6;border-color:#c3bba8;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:#fbf8f0}
+.btn.primary:hover{background:#343a3e;border-color:#343a3e}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.ghost:hover{background:#f0ebdf}
+.btn.danger{color:var(--danger);border-color:#e6c9c1;background:#fdf4f1}
+.btn.danger:hover{background:#fae8e3;border-color:#d9aa9e;color:var(--danger)}
+.btn .i{width:14px;height:14px}
+.icon{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;border:1px solid transparent;color:var(--ink-2);transition:background .15s,color .15s}
+.icon:hover{background:#f0ebdf;color:var(--ink)}
+.icon:disabled{opacity:.3;cursor:default;background:none}
+.icon .i{width:16px;height:16px}
+.icon.on{background:var(--green-soft);color:var(--green)}
+.icon.dangerish:hover{background:#fae8e3;color:var(--danger)}
+.tagbtn{height:28px;padding:0 9px;border-radius:7px;border:1px solid transparent;font-size:11.5px;color:var(--muted);transition:.15s;white-space:nowrap}
+.tagbtn:hover{background:#f1ecdf;color:var(--ink)}
+.tagbtn.on{background:var(--green-soft);border-color:#cdddD4;color:var(--green);font-weight:500}
+.menu-wrap{position:relative}
+.menu{position:absolute;right:0;top:36px;z-index:60;min-width:196px;padding:5px;background:var(--panel);border:1px solid var(--line-2);border-radius:11px;box-shadow:var(--shadow-1);display:none}
+.menu.show{display:block;animation:pop .12s ease}
+@keyframes pop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.menu button{display:flex;align-items:center;gap:9px;width:100%;padding:7px 9px;border-radius:7px;font-size:12px;color:var(--ink-2);text-align:left}
+.menu button:hover{background:#f3eee2;color:var(--ink)}
+.menu button .i{width:15px;height:15px;color:var(--muted)}
+.menu .msep{height:1px;background:var(--line);margin:5px 4px}
+.menu .mhint{padding:4px 9px 6px;font-size:10.5px;color:var(--muted);letter-spacing:.03em}
+
+/* ---------- floor tabs ---------- */
+.floorbar{position:relative;z-index:20;display:flex;align-items:stretch;gap:10px;padding:0 12px;background:var(--panel-2);border-bottom:1px solid var(--line);min-width:0}
+.floors{display:flex;gap:2px;min-width:0;overflow:auto;scrollbar-width:none}
+.floors::-webkit-scrollbar{display:none}
+.ftab{position:relative;display:flex;align-items:center;gap:8px;padding:0 14px;font-size:12.5px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,background .15s}
+.ftab:hover{color:var(--ink);background:#eee9dc}
+.ftab.on{color:var(--ink);font-weight:600;border-bottom-color:var(--accent);background:#f8f4ea}
+.ftab .fnum{font:10.5px var(--mono);color:var(--muted);background:#e8e2d4;border-radius:20px;padding:1px 6px;line-height:1.5}
+.ftab.on .fnum{background:var(--accent-soft);color:var(--accent-2)}
+.ftab .fdone{color:var(--green)}
+.floorhint{margin-left:auto;display:flex;align-items:center;font-size:11px;color:var(--muted);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.floorhint b{color:var(--ink-2);font-weight:500}
+
+/* ---------- workspace ---------- */
+.workspace{--right-w:420px;position:relative;display:grid;grid-template-columns:300px minmax(0,1fr) var(--right-w);min-height:0;background:var(--paper)}
+.panel{display:flex;flex-direction:column;min-height:0;min-width:0;background:var(--panel)}
+.panel.left{border-right:1px solid var(--line)}
+.panel.right{position:relative;border-left:1px solid var(--line)}
+/* 右栏拖拽条 */
+.rhand{position:absolute;left:-5px;top:0;bottom:0;width:11px;z-index:6;cursor:col-resize}
+.rhand::after{content:'';position:absolute;left:4px;top:0;bottom:0;width:3px;background:transparent;transition:background .12s}
+.rhand:hover::after,.rhand.on::after{background:var(--accent)}
+body.rresize{cursor:col-resize;user-select:none}
+body.rresize .rhand::after{background:var(--accent)}
+.phead{display:flex;align-items:center;gap:8px;padding:11px 13px 9px;flex:none}
+.ptitle{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--ink)}
+.ptitle .count{font:400 11px var(--mono);color:var(--muted);margin-left:4px;letter-spacing:0}
+.seg{display:flex;margin-left:auto;background:#eee9dc;border-radius:7px;padding:2px;gap:1px}
+.seg button{height:23px;padding:0 8px;border-radius:5px;font-size:11px;color:var(--muted)}
+.seg button.on{background:#fffdf8;color:var(--ink);box-shadow:0 1px 2px rgba(50,40,20,.1)}
+.searchwrap{position:relative;margin:0 13px 8px;flex:none}
+.searchwrap .i{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted)}
+.searchwrap input{width:100%;height:31px;padding:0 30px 0 29px;border:1px solid var(--line-2);border-radius:8px;background:#fffdf8;font-size:12px;outline:none;transition:border-color .15s,box-shadow .15s}
+.searchwrap input:focus{border-color:#c6a999;box-shadow:0 0 0 3px rgba(176,84,60,.09)}
+.searchwrap input::-webkit-search-cancel-button{-webkit-appearance:none}
+.searchwrap kbd{position:absolute;right:8px;top:50%;transform:translateY(-50%);font:10px var(--mono);color:var(--muted);border:1px solid var(--line-2);border-radius:4px;padding:1px 4px;background:#fbf8f0}
+.chips{display:flex;gap:4px;padding:0 13px 9px;flex:none;flex-wrap:wrap}
+.chips button{height:25px;padding:0 8px;border-radius:20px;font-size:11px;color:var(--muted);border:1px solid transparent;transition:.15s}
+.chips button:hover{background:#f3eee2;color:var(--ink)}
+.chips button.on{background:var(--ink);color:#fbf8f0;border-color:var(--ink)}
+.chips em{font:400 10px var(--mono);font-style:normal;opacity:.68;margin-left:3px}
+.list{flex:1;min-height:0;overflow:auto;padding:0 8px 10px;scrollbar-width:thin;scrollbar-color:#cfc7b5 transparent;overscroll-behavior:contain}
+.list::-webkit-scrollbar{width:9px}
+.list::-webkit-scrollbar-thumb{background:#d3cbbb;border-radius:6px;border:2px solid var(--panel)}
+.list::-webkit-scrollbar-track{background:transparent}
+.ghead{position:sticky;top:0;z-index:2;display:flex;align-items:baseline;gap:6px;padding:9px 8px 4px;background:linear-gradient(var(--panel) 70%,rgba(252,250,245,0));}
+.ghead b{font-size:11.5px;font-weight:600;color:var(--ink-2);letter-spacing:.02em}
+.ghead .gfloor{font-size:9.5px;color:var(--muted);border:1px solid var(--line-2);border-radius:3px;padding:0 3px;line-height:1.5}
+.ghead .gmeta{margin-left:auto;font:10.5px var(--mono);color:var(--muted)}
+.row{display:flex;align-items:center;gap:8px;width:100%;padding:5px 8px 5px 6px;border-radius:7px;border:1px solid transparent;text-align:left;transition:background .12s;scroll-margin:56px 0 64px}
+.row:hover{background:#f3eee2}
+.row.sel{background:var(--accent-soft);border-color:#ecd0c5}
+.pno{flex:none;width:37px;text-align:center;font:10.5px/1.7 var(--mono);color:var(--muted);border:1px solid var(--line-2);border-radius:4px;background:#fffdf7;font-variant-numeric:tabular-nums}
+.row.done .pno{color:var(--green);border-color:#c6d8cf;background:var(--green-soft)}
+.row.sel .pno{border-color:#d9b3a6;color:var(--accent-2);background:#fff}
+.rmain{flex:1;min-width:0}
+.rroom{display:block;font-size:12px;line-height:1.35;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row.done .rroom{color:var(--ink-2)}
+.rview{display:block;font-size:10.5px;line-height:1.35;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.rstate{flex:none;width:13px;display:flex;justify-content:center;color:var(--green)}
+.rstate .i{width:12px;height:12px;stroke-width:2.2}
+.rflag{flex:none;font:9px var(--mono);color:var(--amber);border:1px solid #e3cfa6;background:var(--amber-soft);border-radius:3px;padding:0 3px;line-height:1.6}
+.empty-list{padding:26px 16px;text-align:center;color:var(--muted);font-size:12px;line-height:1.8}
+.pfoot{flex:none;padding:8px 13px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--muted);background:#faf7ef;white-space:nowrap;overflow:hidden}
+.pfoot .saved{margin-left:auto;display:inline-flex;align-items:center;gap:4px}
+.dot{width:5px;height:5px;border-radius:50%;background:#6f977f;display:inline-block}
+.dot.warn{background:var(--amber)}
+
+/* ---------- stage ---------- */
+.stage{position:relative;overflow:hidden;min-width:0;user-select:none;-webkit-user-select:none;background:radial-gradient(115% 95% at 50% 38%,#f0ece3 0%,#e4dfd3 72%,#ddd7c9 100%);touch-action:none}
+.stage.placing{cursor:crosshair}
+.stage.panning{cursor:grabbing}
+.stage.space{cursor:grab}
+.world{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+.world.anim{transition:transform .24s cubic-bezier(.22,.7,.28,1)}
+.plan{display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;box-shadow:var(--shadow-2)}
+.overlay{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}
+.hud{position:absolute;z-index:6;pointer-events:none;display:flex;gap:6px}
+.hud.tl{left:14px;top:12px;align-items:flex-start;flex-direction:column;gap:5px}
+.hud.tr{right:14px;top:12px;align-items:center}
+.hud.bl{left:14px;bottom:12px;align-items:center}
+.hud.br{right:14px;bottom:12px;align-items:center}
+.card{pointer-events:auto;background:rgba(253,251,246,.93);backdrop-filter:blur(10px);border:1px solid rgba(206,198,182,.9);border-radius:10px;box-shadow:0 1px 2px rgba(50,40,20,.07),0 12px 26px -20px rgba(50,40,20,.45)}
+.floorcard{display:flex;align-items:center;gap:8px;padding:6px 10px;font-size:11.5px;color:var(--ink-2)}
+.floorcard b{font-weight:600;color:var(--ink);font-size:12px}
+.floorcard .fc-num{font:10.5px var(--mono);color:var(--muted)}
+.zoomcard{display:flex;align-items:center;padding:3px}
+.zoomcard button{width:28px;height:26px;display:grid;place-items:center;border-radius:7px;color:var(--ink-2)}
+.zoomcard button:hover{background:#f0ebdf}
+.zoomcard .zval{min-width:46px;text-align:center;font:10.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.zoomcard .zfit{border-left:1px solid var(--line);margin-left:2px;padding-left:4px;width:auto;padding-right:7px;font-size:11px;gap:4px;display:flex;align-items:center}
+.hintbar{padding:6px 10px;font-size:11px;color:var(--ink-2);display:flex;align-items:center;gap:6px;max-width:min(560px,60vw)}
+.hintbar kbd{font:10px var(--mono);border:1px solid var(--line-2);border-radius:4px;padding:0 4px;background:#fffdf8;color:var(--ink-2);line-height:1.6}
+.hintbar .dim{color:var(--muted)}
+.coordcard{padding:5px 9px;font:10.5px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;display:flex;gap:9px}
+.coordcard b{color:var(--ink-2);font-weight:500}
+.onboard{position:absolute;z-index:8;inset:0;display:grid;place-items:center;pointer-events:none}
+.onboard .ob{pointer-events:auto;width:min(380px,84%);padding:22px 24px 20px;background:rgba(253,251,246,.96);backdrop-filter:blur(12px);border:1px solid rgba(206,198,182,.9);border-radius:14px;box-shadow:0 30px 70px -30px rgba(50,40,20,.55)}
+.ob .kicker{font:10.5px var(--mono);letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+.ob h3{margin:8px 0 12px;font-size:17px;line-height:1.45;letter-spacing:.01em}
+.ob ol{margin:0 0 16px;padding-left:18px;color:var(--ink-2);font-size:12px;line-height:1.95}
+.ob ol b{color:var(--ink);font-weight:600}
+.ob .obrow{display:flex;gap:8px;align-items:center}
+.ob .obrow .dim{font-size:10.5px;color:var(--muted);margin-left:auto}
+.planfail{position:absolute;inset:0;z-index:9;display:grid;place-items:center;background:rgba(244,241,233,.6)}
+.planfail .pf{max-width:420px;padding:20px 22px;background:var(--panel);border:1px solid var(--line-2);border-radius:12px;box-shadow:var(--shadow-1);font-size:12px;line-height:1.7;color:var(--ink-2)}
+.planfail h4{margin:0 0 6px;font-size:14px;color:var(--ink)}
+.planfail code{display:block;margin-top:8px;font:10.5px var(--mono);color:var(--muted);word-break:break-all}
+.planfail .btn{margin-top:12px}
+#tip{position:absolute;z-index:9;pointer-events:none;max-width:260px;padding:6px 9px;background:rgba(34,38,42,.94);color:#f7f3e8;border-radius:7px;font-size:11px;line-height:1.5;box-shadow:0 8px 20px -10px rgba(0,0,0,.6);opacity:0;transform:translate(-50%,-100%) translateY(-10px);transition:opacity .1s}
+#tip.show{opacity:1}
+#tip b{font:600 11px var(--mono);color:#f0c9b8}
+#tip span{color:#d8d3c6;display:block;font-size:10.5px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- markers ---------- */
+.mk{cursor:pointer}
+.mk .hit{fill:rgba(0,0,0,0)}
+.mk .wedge{stroke-linejoin:round}
+.mk .pin{stroke:#fffdf8;stroke-width:1.5}
+.mk .pnum{font:700 8.4px var(--font);fill:#fffdf8;text-anchor:middle;dominant-baseline:central;pointer-events:none;letter-spacing:-.02em}
+.mk .ray{stroke-linecap:round}
+.mk .plabel{font:600 10px var(--font);fill:var(--ink);paint-order:stroke;stroke:#fffdf8;stroke-width:3;stroke-linejoin:round;pointer-events:none;dominant-baseline:central}
+.mk .flag{stroke:#fffdf8;stroke-width:1.2}
+.mk .knob{cursor:grab}
+.mk .knob circle{fill:#fffdf8;stroke:var(--accent);stroke-width:1.6}
+.mk .knob .knobhit{fill:rgba(0,0,0,0);stroke:none}
+.mk .knob line{stroke:var(--accent);stroke-width:1.4}
+.mk .bearing{font:600 9.5px var(--mono);fill:#fffdf8;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.mk .bearing-bg{fill:var(--accent);stroke:#fffdf8;stroke-width:1.2}
+.mk.sel .pin{filter:drop-shadow(0 2px 5px rgba(120,40,20,.45))}
+.mk.locked{cursor:default}
+.mk .lockdot{fill:var(--amber);stroke:#fffdf8;stroke-width:1.1}
+.draft .wedge{fill:rgba(176,84,60,.12);stroke:rgba(176,84,60,.55);stroke-width:1.2;stroke-dasharray:4 3}
+.draft .ray{stroke:rgba(176,84,60,.7);stroke-width:1.2;stroke-dasharray:3 3}
+.draft .cross{stroke:var(--accent);stroke-width:1.4}
+.draft .dnum{font:700 9px var(--mono);fill:var(--accent-2);text-anchor:middle;dominant-baseline:central}
+
+/* ---------- inspector ---------- */
+.inspect{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#cfc7b5 transparent}
+.inspect::-webkit-scrollbar{width:9px}
+.inspect::-webkit-scrollbar-thumb{background:#d3cbbb;border-radius:6px;border:2px solid var(--panel)}
+.prev{position:relative;background:#e6e1d5;aspect-ratio:4/3;overflow:hidden;border-bottom:1px solid var(--line)}
+.prev img{width:100%;height:100%;object-fit:contain;display:block;cursor:zoom-in;background:#ddd8cc}
+.prev .prevempty{position:absolute;inset:0;display:grid;place-items:center;color:#9b968a;font-size:11.5px}
+.prev .pbadge{position:absolute;left:9px;top:9px;display:flex;align-items:center;gap:5px}
+.prev .pno2{font:600 11px var(--mono);background:rgba(34,38,42,.82);color:#fbf7ec;border-radius:5px;padding:2px 6px;backdrop-filter:blur(4px)}
+.prev .conf{font-size:10px;border-radius:4px;padding:1px 5px;background:rgba(251,247,236,.9);color:var(--ink-2);backdrop-filter:blur(4px)}
+.prev .conf.high{color:var(--green)}
+.prev .conf.low{color:var(--danger)}
+.prev .conf.dup{color:var(--amber)}
+.prev .expand{position:absolute;right:8px;bottom:8px;width:26px;height:26px;display:grid;place-items:center;border-radius:6px;background:rgba(34,38,42,.72);color:#fbf7ec;backdrop-filter:blur(4px)}
+.prev .expand .i{width:14px;height:14px}
+.meta{padding:13px 15px 4px}
+.meta h2{margin:0;font-size:16px;font-weight:600;letter-spacing:.01em;line-height:1.4}
+.meta .view{margin:6px 0 0;font-size:12px;line-height:1.7;color:var(--ink-2)}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.tag{font-size:10px;padding:1.5px 6px;border-radius:4px;background:#f1ece0;color:var(--ink-2);border:1px solid transparent}
+.tag.amber{background:var(--amber-soft);color:var(--amber);border-color:#e8d6b3}
+.tag.red{background:#f8e7e2;color:var(--danger);border-color:#efd3cb}
+.tag.green{background:var(--green-soft);color:var(--green);border-color:#d3e2da}
+.tag.mono{font-family:var(--mono)!important}
+.meta .note{margin:9px 0 0;font-size:11px;line-height:1.65;color:var(--muted);border-left:2px solid var(--line-2);padding-left:8px}
+.meta .path{margin:9px 0 0;font:10px var(--mono);color:#a6a293;word-break:break-all}
+.sect{border-top:1px solid var(--line);margin-top:12px;padding:12px 15px 16px}
+.sect h3{display:flex;align-items:center;gap:7px;margin:0 0 10px;font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--muted)}
+.sect h3 .bar{width:2px;height:11px;background:var(--accent);border-radius:2px}
+.sect h3 .right{margin-left:auto;font:10px var(--mono);color:var(--muted);letter-spacing:0}
+.readout{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.readout div{background:#f7f3e9;border:1px solid var(--line);border-radius:7px;padding:5px 7px;min-width:0}
+.readout label{display:block;font-size:9.5px;color:var(--muted);letter-spacing:.05em}
+.readout b{display:block;font:600 11.5px var(--mono);color:var(--ink);margin-top:1px;white-space:nowrap}
+.readout small{font:9.5px var(--mono);color:var(--muted);margin-left:1px}
+.field{display:flex;align-items:center;gap:9px;margin:8px 0}
+.field > .flabel{flex:none;width:52px;font-size:11px;color:var(--muted)}
+.field .grow{flex:1;min-width:0;display:flex;align-items:center;gap:6px}
+input[type=text],input[type=number],select{height:29px;border:1px solid var(--line-2);border-radius:7px;background:#fffdf8;padding:0 8px;font-size:11.5px;outline:none;transition:border-color .15s,box-shadow .15s;min-width:0}
+input[type=text]:focus,input[type=number]:focus,select:focus{border-color:#c6a999;box-shadow:0 0 0 3px rgba(176,84,60,.08)}
+input[type=number]{font-family:var(--mono);font-size:11px;width:62px;text-align:right}
+select{width:100%;padding-right:22px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%238a8b82' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
+input[type=range]{-webkit-appearance:none;appearance:none;height:18px;background:transparent;flex:1;min-width:0;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:3px;border-radius:3px;background:linear-gradient(90deg,var(--accent) var(--fill,50%), #ddd6c6 var(--fill,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#fffdf8;border:2px solid var(--accent);margin-top:-5px;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+input[type=range]::-moz-range-track{height:3px;border-radius:3px;background:#ddd6c6}
+input[type=range]::-moz-range-progress{height:3px;border-radius:3px;background:var(--accent)}
+input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:#fffdf8;border:2px solid var(--accent)}
+.compass{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%;max-width:132px}
+.compass button{height:25px;border:1px solid var(--line-2);border-radius:6px;background:#fffdf8;color:var(--muted);display:grid;place-items:center;font-size:10px}
+.compass button:hover{background:#f4efe4;color:var(--ink);border-color:#c9c0ac}
+.compass button.cur{background:var(--accent-soft);border-color:#e2b9aa;color:var(--accent-2)}
+.compass button.mid{font:600 10px var(--mono);color:var(--ink);background:#f4efe4}
+.compass .arr{font-size:12px;line-height:1}
+.presets{display:flex;gap:4px}
+.presets button{height:22px;padding:0 6px;border-radius:5px;border:1px solid var(--line-2);font:10px var(--mono);color:var(--muted)}
+.presets button.on{background:var(--ink);color:#fbf8f0;border-color:var(--ink)}
+.links{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:3px;height:22px;padding:0 4px 0 6px;border-radius:5px;background:#f1ece0;font:10.5px var(--mono);color:var(--ink-2)}
+.chip button{width:14px;height:14px;display:grid;place-items:center;border-radius:3px;color:var(--muted);font-size:10px;line-height:1}
+.chip button:hover{background:#e3dccb;color:var(--danger)}
+.chip.add{border:1px dashed var(--line-2);background:transparent;color:var(--muted);padding:0 7px;font-family:var(--font);cursor:pointer}
+.chip.add:hover{border-color:#c0b6a1;color:var(--ink)}
+.camactions{display:flex;gap:6px;margin-top:12px}
+.camactions .btn{flex:1;height:28px;font-size:11px}
+.camactions .btn.danger{color:var(--danger);border-color:#e6c9c1;background:#fdf4f1}
+.camactions .btn.danger:hover{background:#fae8e3}
+.armbox{text-align:center;padding:18px 14px 6px}
+.armbox .crossic{width:38px;height:38px;margin:0 auto 10px;display:grid;place-items:center;border-radius:50%;background:var(--accent-soft);color:var(--accent-2)}
+.armbox .crossic .i{width:19px;height:19px}
+.armbox b{display:block;font-size:13px;margin-bottom:5px}
+.armbox p{margin:0 auto 12px;font-size:11px;line-height:1.75;color:var(--muted);max-width:250px}
+.armbox kbd{font:10px var(--mono);border:1px solid var(--line-2);border-radius:4px;padding:0 4px;background:#fffdf8}
+.emptypanel{padding:30px 20px;text-align:center;color:var(--muted)}
+.emptypanel .big{font-size:13px;color:var(--ink-2);margin-bottom:6px}
+.emptypanel p{margin:0;font-size:11.5px;line-height:1.8}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 15px;margin:12px 0 0}
+.mini div{background:#f7f3e9;border:1px solid var(--line);border-radius:8px;padding:8px 9px}
+.mini label{display:block;font-size:9.5px;color:var(--muted);letter-spacing:.05em}
+.mini b{display:block;font:600 14px var(--mono);margin-top:2px}
+.pager{display:flex;gap:6px;padding:0 15px 18px}
+.pager .btn{flex:1;height:28px;font-size:11px}
+.pager .btn:disabled{opacity:.35}
+
+/* ---------- lightbox / modal / toast ---------- */
+.backdrop{position:fixed;inset:0;z-index:100;display:none;background:rgba(28,25,18,.72);backdrop-filter:blur(3px)}
+.backdrop.show{display:flex;align-items:center;justify-content:center}
+.lb-close{position:absolute;z-index:5;right:20px;top:18px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.12);color:#f7f3e8;display:grid;place-items:center;backdrop-filter:blur(6px);cursor:pointer}
+.lb-close:hover{background:rgba(255,255,255,.22)}
+.lb-imgwrap{position:absolute;z-index:1;inset:0;overflow:hidden;cursor:grab;display:grid;place-items:center}
+.lb-imgwrap.drag{cursor:grabbing}
+.lb-imgwrap img{max-width:94vw;max-height:92vh;box-shadow:0 30px 80px -30px #000;transform-origin:center;will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-bar{position:absolute;z-index:4;left:50%;bottom:20px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;background:rgba(30,27,21,.72);backdrop-filter:blur(10px);color:#e9e4d6;font-size:11px;pointer-events:none}
+.lb-bar b{font:600 11px var(--mono);color:#fff}
+.lb-bar .dim{color:#b3ad9d}
+.lb-nav{position:absolute;z-index:4;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);color:#f7f3e8;display:grid;place-items:center;backdrop-filter:blur(6px);cursor:pointer}
+.lb-nav:hover{background:rgba(255,255,255,.2)}
+.lb-nav.prev{left:18px}.lb-nav.next{right:18px}
+.modal{position:fixed;inset:0;z-index:110;display:none;place-items:center;background:rgba(28,25,18,.55);backdrop-filter:blur(3px)}
+.modal.show{display:grid}
+.modal .box{width:min(660px,92vw);max-height:84vh;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line-2);border-radius:14px;box-shadow:0 40px 100px -30px rgba(0,0,0,.55);overflow:hidden}
+.modal .box.narrow{width:min(430px,92vw)}
+.modal .mhead{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+.modal .mhead h3{margin:0;font-size:14px;font-weight:600}
+.modal .mhead .x{margin-left:auto;width:28px;height:28px;display:grid;place-items:center;border-radius:7px;color:var(--muted)}
+.modal .mhead .x:hover{background:#f1ece0;color:var(--ink)}
+.modal .mbody{padding:16px 18px;overflow:auto;font-size:12px;line-height:1.75;color:var(--ink-2)}
+.modal .mfoot{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;background:#faf7ef}
+.modal h4{margin:16px 0 6px;font-size:12px;color:var(--ink)}
+.modal h4:first-child{margin-top:0}
+.modal p{margin:0 0 10px}
+.modal ul{margin:0 0 10px;padding-left:18px}
+.modal li{margin:3px 0}
+.modal .kbdrow{display:flex;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px dashed var(--line)}
+.modal .kbdrow span:first-child{flex:none;width:132px;display:flex;gap:4px;flex-wrap:wrap}
+.modal .kbdrow kbd{font:10px var(--mono);border:1px solid var(--line-2);border-radius:4px;padding:1px 5px;background:#f7f3e9;color:var(--ink-2)}
+.modal .kbdrow span:last-child{color:var(--muted);font-size:11.5px}
+.modal .pathline{font:10px var(--mono);color:var(--muted);word-break:break-all;background:#f7f3e9;border:1px solid var(--line);border-radius:6px;padding:6px 8px;margin:4px 0 10px}
+.modal .rowactions{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}
+.modal .warnbox{padding:9px 11px;border-radius:8px;background:var(--amber-soft);border:1px solid #e8d6b3;color:#7a5a1e;font-size:11.5px;margin:8px 0}
+.picklist{max-height:46vh;overflow:auto;border:1px solid var(--line);border-radius:9px;margin:8px 0;background:#fffdf8}
+.pickrow{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid #f1ece0;cursor:pointer;font-size:12px}
+.pickrow:last-child{border-bottom:0}
+.pickrow:hover{background:#f7f3e9}
+.pickrow input{accent-color:var(--accent);width:14px;height:14px}
+.pickrow .pno3{font:10px var(--mono);color:var(--muted);width:34px}
+.pickrow .pk-room{color:var(--ink);width:110px;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pickrow .pk-view{flex:1;min-width:0;color:var(--muted);font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);z-index:200;padding:8px 14px;border-radius:9px;background:rgba(34,38,42,.95);color:#f8f4ea;font-size:12px;box-shadow:0 10px 30px -12px rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:80vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.dropzone{position:fixed;inset:0;z-index:150;display:none;place-items:center;background:rgba(176,84,60,.16);border:3px dashed rgba(176,84,60,.55);color:var(--accent-2);font-size:15px;font-weight:600;backdrop-filter:blur(2px)}
+.dropzone.show{display:grid}
+.mobile-only{display:none}
+.only-inspect,.only-pages,.only-close{display:none}
+
+/* ---------- print sheet (标注图纸 / 另存 PDF) ---------- */
+.print-sheet{display:none}
+.ps-svg text{font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+.ps-svg .ps-num{font-family:"Cascadia Mono","SF Mono",Consolas,monospace}
+.ps-svg .ps-deg{font-family:"Cascadia Mono",Consolas,monospace}
+@media print{
+  @page{size:A4 landscape;margin:10mm}
+  html,body{height:auto;overflow:visible;background:#fff}
+  body.printing>*:not(.print-sheet){display:none!important}
+  body.printing .print-sheet{display:block}
+  .ps-svg{display:block;width:100%;height:auto}
+  .print-sheet.ps-next{break-before:page;page-break-before:always}
+}
+
+@media (max-width:1440px){
+  .workspace{--right-w:380px;grid-template-columns:276px minmax(0,1fr) var(--right-w)}
+  .progress{width:160px}
+}
+@media (max-width:1200px){
+  .workspace{grid-template-columns:264px minmax(0,1fr)}
+  .panel.right{position:absolute;right:0;top:0;bottom:0;width:var(--right-w);z-index:40;border-left:1px solid var(--line-2);box-shadow:-24px 0 60px -34px rgba(40,30,10,.5);transform:translateX(103%);transition:transform .22s cubic-bezier(.22,.7,.28,1)}
+  .panel.right.show{transform:none}
+  .only-inspect,.only-close{display:inline-flex}
+  .progress{display:none}
+  .floorhint{display:none}
+}
+@media (max-width:980px){
+  .workspace{grid-template-columns:0 minmax(0,1fr)}
+  .panel.left{position:absolute;left:0;top:0;bottom:0;width:290px;z-index:38;transform:translateX(-103%);transition:transform .22s}
+  .panel.left.show{transform:none;box-shadow:24px 0 60px -34px rgba(40,30,10,.5)}
+  .only-pages{display:inline-flex}
+  .brand .bsub{display:none}
+  .topbar{gap:10px}
+  .actions{gap:2px}
+  .pfootText{display:none}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="ico-undo" viewBox="0 0 24 24"><path d="M4 9h10a5 5 0 1 1 0 10h-4"/><path d="M8 5 4 9l4 4"/></symbol>
+  <symbol id="ico-redo" viewBox="0 0 24 24"><path d="M20 9H10a5 5 0 1 0 0 10h4"/><path d="M16 5l4 4-4 4"/></symbol>
+  <symbol id="ico-fit" viewBox="0 0 24 24"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></symbol>
+  <symbol id="ico-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.7 9.3a2.4 2.4 0 1 1 3.4 2.1c-.7.4-1.1.9-1.1 1.8"/><path d="M12 17h.01"/></symbol>
+  <symbol id="ico-caret" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="ico-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></symbol>
+  <symbol id="ico-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="ico-expand" viewBox="0 0 24 24"><path d="M9 3H5.5A1.5 1.5 0 0 0 4 4.5V9M15 3h3.5A1.5 1.5 0 0 1 20 4.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H4.5A1.5 1.5 0 0 1 3 18.5V15"/></symbol>
+  <symbol id="ico-left" viewBox="0 0 24 24"><path d="M14.5 5.5 8 12l6.5 6.5"/></symbol>
+  <symbol id="ico-right" viewBox="0 0 24 24"><path d="M9.5 5.5 16 12l-6.5 6.5"/></symbol>
+  <symbol id="ico-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="ico-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="ico-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6.5 7l.9 12a2 2 0 0 0 2 1.9h5.2a2 2 0 0 0 2-1.9l.9-12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></symbol>
+  <symbol id="ico-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+  <symbol id="ico-unlock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 7.5-2"/></symbol>
+  <symbol id="ico-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+  <symbol id="ico-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="9.5" r="1.6"/><path d="M4 17l4.5-4.5 3 3L15 12l5 5"/></symbol>
+  <symbol id="ico-json" viewBox="0 0 24 24"><path d="M9 4H7a2 2 0 0 0-2 2v3a2 2 0 0 1-2 2 2 2 0 0 1 2 2v3a2 2 0 0 0 2 2h2M15 4h2a2 2 0 0 1 2 2v3a2 2 0 0 0 2 2 2 2 0 0 0-2 2v3a2 2 0 0 1-2 2h-2"/></symbol>
+  <symbol id="ico-import" viewBox="0 0 24 24"><path d="M12 15V4"/><path d="M8 8l4-4 4 4"/><path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"/></symbol>
+  <symbol id="ico-md" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M7 15.5v-7l2.5 3 2.5-3v7M16 8.5v7M13.5 13l2.5 2.5 2.5-2.5"/></symbol>
+  <symbol id="ico-csv" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M3.5 10h17M9 10v9M15 10v9"/></symbol>
+  <symbol id="ico-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></symbol>
+  <symbol id="ico-folder" viewBox="0 0 24 24"><path d="M3.5 7.5A1.5 1.5 0 0 1 5 6h4l2 2h8a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z"/></symbol>
+  <symbol id="ico-link" viewBox="0 0 24 24"><path d="M10 13.8a4 4 0 0 0 5.7 0l2.6-2.6a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10.2a4 4 0 0 0-5.7 0l-2.6 2.6a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="ico-check" viewBox="0 0 24 24"><path d="M5 12.5 9.5 17 19 7.5"/></symbol>
+  <symbol id="ico-layers" viewBox="0 0 24 24"><path d="M12 3.5 21 8l-9 4.5L3 8z"/><path d="m4 12 8 4 8-4M4 16l8 4 8-4"/></symbol>
+  <symbol id="ico-panel" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M14.5 4.5v15"/></symbol>
+  <symbol id="ico-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="ico-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></symbol>
+</defs></svg>
+
+<div class="app" id="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">__LOGO__</div>
+      <div>
+        <div class="bname">__PROJECT_NAME__</div>
+        <div class="bsub">__SUBTITLE__</div>
+      </div>
+    </div>
+    <div class="progress" title="已标全景 / 全部全景">
+      <div class="ptext"><b id="doneCount">0</b><span>/</span><span id="totalCount">__PAGE_COUNT__</span><span class="plabel" id="progressLabel">已标注</span></div>
+      <div class="pbar"><i id="pbarFill"></i></div>
+    </div>
+    <div class="actions">
+      <button class="icon" id="btnUndo" title="撤销（Ctrl+Z）" aria-label="撤销" disabled><svg class="i"><use href="#ico-undo"/></svg></button>
+      <button class="icon" id="btnRedo" title="重做（Ctrl+Shift+Z）" aria-label="重做" disabled><svg class="i"><use href="#ico-redo"/></svg></button>
+      <span class="vsep"></span>
+      <button class="icon only-pages" id="btnPages" title="全景清单" aria-label="全景清单"><svg class="i"><use href="#ico-layers"/></svg></button>
+      <button class="icon" id="btnFit" title="适配图纸（F）" aria-label="适配图纸"><svg class="i"><use href="#ico-fit"/></svg></button>
+      <button class="tagbtn" id="btnLabels" title="在点位旁显示空间名称（L）">空间名</button>
+      <button class="tagbtn" id="btnWedges" title="全景点位模式不使用视场角" hidden>视场角</button>
+      <span class="vsep"></span>
+      <button class="btn ghost" id="btnImport" title="导入之前导出的标注 JSON"><svg class="i"><use href="#ico-import"/></svg>导入</button>
+      <div class="menu-wrap">
+        <button class="btn primary" id="btnExport">导出<svg class="i" style="width:12px;height:12px"><use href="#ico-caret"/></svg></button>
+        <div class="menu" id="exportMenu">
+          <div class="mhint">导出标注数据</div>
+          <button data-export="json"><svg class="i"><use href="#ico-json"/></svg>JSON（可再次导入）</button>
+          <button data-export="md"><svg class="i"><use href="#ico-md"/></svg>Markdown 对照表</button>
+          <button data-export="csv"><svg class="i"><use href="#ico-csv"/></svg>CSV 表格</button>
+          <button data-export="png"><svg class="i"><use href="#ico-image"/></svg>标注图纸 PNG</button>
+          <button data-export="print"><svg class="i"><use href="#ico-md"/></svg>打印当前楼层 / PDF</button>
+          <button data-export="printAll"><svg class="i"><use href="#ico-layers"/></svg>打印全部楼层 / PDF</button>
+          <div class="msep"></div>
+          <button data-export="clip"><svg class="i"><use href="#ico-copy"/></svg>复制点位摘要</button>
+        </div>
+      </div>
+      <span class="vsep"></span>
+      <button class="icon dangerish" id="btnClear" title="清空所有标注" aria-label="清空所有标注" disabled><svg class="i"><use href="#ico-trash"/></svg></button>
+      <button class="icon only-inspect" id="btnInspect" title="当前全景详情" aria-label="全景详情"><svg class="i"><use href="#ico-panel"/></svg></button>
+      <button class="icon" id="btnHelp" title="帮助与快捷键（?）" aria-label="帮助"><svg class="i"><use href="#ico-help"/></svg></button>
+    </div>
+  </header>
+
+  <nav class="floorbar">
+    <div class="floors" id="floorTabs" role="tablist" aria-label="楼层"></div>
+    <div class="floorhint" id="floorHint">在平面图上<b>单击</b>落下全景点位（不要朝向）</div>
+  </nav>
+
+  <main class="workspace">
+    <aside class="panel left" id="leftPanel">
+      <div class="phead">
+        <div class="ptitle">全景 <span class="count" id="listCount"></span></div>
+        <div class="seg" id="sortSeg">
+          <button data-sort="room" class="on" title="按空间分组">按空间</button>
+          <button data-sort="page" title="按 PDF 页码顺序">按页码</button>
+        </div>
+      </div>
+      <div class="searchwrap">
+        <svg class="i"><use href="#ico-search"/></svg>
+        <input id="search" type="search" placeholder="搜索页码 / 空间 / 画面…" autocomplete="off" spellcheck="false">
+        <kbd>/</kbd>
+      </div>
+      <div class="chips" id="filters">
+        <button data-filter="all" class="on">全部<em></em></button>
+        <button data-filter="todo">未标注<em></em></button>
+        <button data-filter="done">已标注<em></em></button>
+        <button data-filter="low">存疑<em></em></button>
+      </div>
+      <div class="list" id="list"></div>
+      <div class="pfoot">
+        <span id="pfootText" class="pfootText">—</span>
+        <span class="saved" id="savedState"><span class="dot"></span><span>本地自动保存</span></span>
+      </div>
+    </aside>
+
+    <section class="stage" id="stage" aria-label="平面图标注区">
+      <div class="world" id="world">
+        <img class="plan" id="plan" alt="楼层平面图" draggable="false">
+        <svg class="overlay" id="overlay" xmlns="http://www.w3.org/2000/svg">
+          <g id="markerLayer"></g>
+          <g id="draftLayer"></g>
+        </svg>
+      </div>
+      <div class="hud tl">
+        <div class="card floorcard"><b id="hudFloorName">景观总览</b><span class="fc-num" id="hudFloorCount">0 / 0</span></div>
+      </div>
+      <div class="hud tr">
+        <div class="card zoomcard">
+          <button id="btnZoomOut" title="缩小（-）" aria-label="缩小"><svg class="i" style="width:14px;height:14px"><use href="#ico-minus"/></svg></button>
+          <span class="zval" id="zoomVal">100%</span>
+          <button id="btnZoomIn" title="放大（+）" aria-label="放大"><svg class="i" style="width:14px;height:14px"><use href="#ico-plus"/></svg></button>
+          <button class="zfit" id="btnZoomFit" title="适配（F）">适配</button>
+        </div>
+      </div>
+      <div class="hud bl">
+        <div class="card hintbar" id="hintBar"></div>
+      </div>
+      <div class="hud br">
+        <div class="card coordcard" id="coordHud"><span>x <b>—</b></span><span>y <b>—</b></span></div>
+      </div>
+      <div class="onboard" id="onboard"></div>
+      <div class="planfail" id="planFail" hidden>
+        <div class="pf">
+          <h4>平面图没有加载出来</h4>
+          <div>这张图纸应按相对路径读取：<code id="failPath">平面图/…</code>请确认本 HTML 与平面图、图片文件夹的相对位置没变；也可以重新指定素材文件夹。</div>
+          <button class="btn primary" id="btnRelinkFail"><svg class="i"><use href="#ico-folder"/></svg>重新选择素材文件夹</button>
+        </div>
+      </div>
+      <div id="tip"></div>
+    </section>
+
+    <aside class="panel right" id="rightPanel">
+      <div class="rhand" id="rHand" title="拖动调整宽度（双击复位）"></div>
+      <div class="phead">
+        <div class="ptitle">当前全景</div>
+        <button class="icon only-close" id="btnCloseInspect" title="收起" style="margin-left:auto"><svg class="i"><use href="#ico-close"/></svg></button>
+      </div>
+      <div class="inspect" id="inspect"></div>
+    </aside>
+  </main>
+</div>
+
+<div class="backdrop" id="lightbox" aria-hidden="true">
+  <button class="lb-close" id="lbClose" aria-label="关闭"><svg class="i"><use href="#ico-close"/></svg></button>
+  <button class="lb-nav prev" id="lbPrev" aria-label="上一张"><svg class="i"><use href="#ico-left"/></svg></button>
+  <button class="lb-nav next" id="lbNext" aria-label="下一张"><svg class="i"><use href="#ico-right"/></svg></button>
+  <div class="lb-imgwrap" id="lbWrap"><img id="lbImg" alt=""></div>
+  <div class="lb-bar"><b id="lbTitle">—</b><span class="dim">滚轮缩放 · 拖动平移 · Esc 关闭</span></div>
+</div>
+
+<div class="modal" id="modal" aria-hidden="true"><div class="box" id="modalBox"></div></div>
+<div class="toast" id="toast"></div>
+<div class="dropzone" id="dropzone">松开以导入点位 JSON</div>
+<input type="file" id="fileJson" accept="application/json,.json" hidden>
+<input type="file" id="fileDir" webkitdirectory directory multiple hidden>
+
+<script id="bootstrap" type="application/json">__BOOTSTRAP_JSON__</script>
+<script>
+/* 机位标注工具 · 实景全景（只标点位，不要朝向/视场）
+   单文件工具：平面图为底，逐张标注点位。项目数据在 bootstrap JSON。
+   数据结构、坐标换算、交互都在这一层完成，便于日后维护。 */
+(() => {
+'use strict';
+
+/* =========================================================
+   1. 基础数据
+   ========================================================= */
+const BOOT = JSON.parse(document.getElementById('bootstrap').textContent);
+const BASE = BOOT.base || '../';
+const FLOORS = BOOT.floors;
+const FLOOR_BY_ID = new Map(FLOORS.map(f => [f.id, f]));
+const PAGES = BOOT.pages.slice().sort((a, b) => a.no - b.no);
+const PAGE_BY_NO = new Map(PAGES.map(p => [p.no, p]));
+const PAGE_INDEX = new Map(PAGES.map((p, i) => [p.no, i]));
+const TOTAL = PAGES.length;
+const SECTION_FLOOR = BOOT.sections;
+const DUP_OF = BOOT.dupOf || {};
+const DEFAULT_FLOOR = FLOORS[0].id;
+const STORE_KEY = String(BOOT.storeKey || 'camera-annot') + '.cameras.v1';
+const LEGACY_KEY = String(BOOT.storeKey || 'camera-annot') + '.cameras.v0';
+const SCHEMA_ID = String(BOOT.schema || 'camera-annot.annotations/1');
+const EXPORT_BASE = String(BOOT.project || '机位标注');
+const NS = 'http://www.w3.org/2000/svg';
+const MIN_SCALE = 0.04;
+const MAX_SCALE = 12;
+const CONE = { normal: 46, selected: 78, rayNormal: 66, raySelected: 96 };
+
+/* =========================================================
+   2. DOM
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const stage = $('#stage'), world = $('#world'), planImg = $('#plan'), overlay = $('#overlay');
+const markerLayer = $('#markerLayer'), draftLayer = $('#draftLayer');
+const listEl = $('#list'), inspectEl = $('#inspect'), toastEl = $('#toast');
+const floorTabs = $('#floorTabs'), searchEl = $('#search'), filtersEl = $('#filters');
+const planFail = $('#planFail'), onboardEl = $('#onboard'), hintEl = $('#hintBar');
+const coordEl = $('#coordHud'), tipEl = $('#tip');
+const inspect = inspectEl;
+
+/* =========================================================
+   3. 状态
+   ========================================================= */
+const state = {
+  floor: DEFAULT_FLOOR,
+  page: null,
+  armed: false,
+  filter: 'all',
+  q: '',
+  sort: 'room',
+  cams: [],
+  prefs: { floor: DEFAULT_FLOOR, labels: false, wedges: false, autoNext: true, onboarded: false },
+  view: { scale: 1, tx: 0, ty: 0 },
+  viewTouched: false,
+  views: {},
+  planW: 0,
+  planH: 0,
+  planCache: {},
+  blobMap: null,
+  blobUrls: new Map(),
+  undo: [],
+  redo: [],
+  drag: null,
+  space: false,
+  hover: null,
+  saveTimer: null,
+  editLock: false
+};
+
+/* =========================================================
+   4. 小工具
+   ========================================================= */
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const normDir = d => ((d % 360) + 360) % 360;
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pad3 = n => String(n).padStart(3, '0');
+const f2 = n => Number(n).toFixed(2);
+const basename = p => String(p).split('/').pop();
+const dirVec = deg => { const r = dirVecRad(deg); return { x: Math.sin(r), y: -Math.cos(r) }; };
+const dirVecRad = deg => deg * Math.PI / 180;
+const dirFromVec = (dx, dy) => normDir(Math.atan2(dx, -dy) * 180 / Math.PI);
+const roomOf = no => (PAGE_BY_NO.get(no) || {}).room || '';
+const confOf = no => (PAGE_BY_NO.get(no) || {}).conf || 'none';
+const sectionFloor = p => (state.prefs.pageFloor || {})[p.no] || p.floor || SECTION_FLOOR[p.sec] || DEFAULT_FLOOR;
+const floorTitle = id => (FLOOR_BY_ID.get(id) || {}).title || id;
+const floorShort = id => { const f = FLOOR_BY_ID.get(id); if (f && f.short) return String(f.short); return ({ B1: 'B1', BM: '夹层', F1: '1F', F2: '2F', F3: '3F' }[id] || id); };
+// 文件名口径：全景在项目文件夹里的编号（1 (12).jpg → 12），界面与导出都用它
+function srcOf(no) {
+  const p = PAGE_BY_NO.get(no) || {};
+  const f = String(p.file || '');
+  const parts = f.split('/');
+  const m = /\((\d+)\)/.exec(f);
+  return { dir: parts.length > 1 ? parts[0] : '', file: parts[parts.length - 1] || '', num: m ? m[1] : String(p.no == null ? no : p.no) };
+}
+const srcNum = no => srcOf(no).num;
+const srcLabel = no => { const s = srcOf(no); return (s.dir ? s.dir + ' ' : '') + s.num; };
+const srcFile = no => srcOf(no).file || ('p' + pad3(no));
+const camForPage = no => state.cams.find(c => c.pages.includes(no));
+const camsOnFloor = id => state.cams.filter(c => c.floor === id);
+const selectedCam = () => (state.page == null ? null : camForPage(state.page));
+const nowTime = () => new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+
+function toast(msg, ms = 2200) {
+  toastEl.innerHTML = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => toastEl.classList.remove('show'), ms);
+}
+
+function download(name, data, mime) {
+  const blob = data instanceof Blob ? data : new Blob([data], { type: mime || 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
+function fileUrl(name) {
+  if (!state.blobMap) return null;
+  const file = state.blobMap.get(name);
+  if (!file) return null;
+  if (!state.blobUrls.has(file)) state.blobUrls.set(file, URL.createObjectURL(file));
+  return state.blobUrls.get(file);
+}
+function planSrc(f) { return fileUrl(basename(f.plan)) || BASE + encodeURI(f.plan); }
+function pageSrc(p) { return fileUrl(basename(p.file)) || BASE + encodeURI(p.file); }
+
+/* =========================================================
+   5. 持久化
+   ========================================================= */
+function saveSoon() {
+  clearTimeout(state.saveTimer);
+  state.saveTimer = setTimeout(saveNow, 350);
+}
+function saveNow() {
+  try {
+    const payload = { v: 2, cams: state.cams, prefs: state.prefs, updatedAt: Date.now() };
+    localStorage.setItem(STORE_KEY, JSON.stringify(payload));
+    const el = $('#savedState');
+    if (el) el.innerHTML = `<span class="dot"></span><span>已保存 ${nowTime()}</span>`;
+  } catch (err) {
+    const el = $('#savedState');
+    if (el) el.innerHTML = `<span class="dot warn"></span><span>本地保存不可用</span>`;
+  }
+}
+function loadSaved() {
+  let raw = null;
+  try { raw = localStorage.getItem(STORE_KEY); } catch (e) { /* 隐私模式 */ }
+  if (raw) {
+    try {
+      const d = JSON.parse(raw);
+      if (Array.isArray(d.cams)) {
+        state.cams = sanitizeCams(d.cams);
+        if (d.prefs) state.prefs = Object.assign(state.prefs, d.prefs);
+        return;
+      }    } catch (e) { /* 损坏则忽略 */ }
+  }
+  try {
+    const old = localStorage.getItem(LEGACY_KEY);
+    if (!old) return;
+    const d = JSON.parse(old);
+    const legacy = Array.isArray(d.cams) ? d.cams : [];
+    if (!legacy.length) return;
+    state.cams = sanitizeCams(legacy.map(c => {
+      const fl = c.floor === 'landscape' ? DEFAULT_FLOOR : c.floor;
+      let dir = c.dir;
+      if (dir == null && c.lx != null && c.ly != null) dir = dirFromVec(c.lx - c.x, c.ly - c.y);
+      return { pages: [Number(c.no)], floor: fl, x: c.x, y: c.y, dir: dir || 0, fov: c.fov || 65, name: c.name || '', note: c.note || '' };
+    }));
+    if (state.cams.length) toast(`已迁移旧版标注：${state.cams.length} 个点位`, 3400);
+  } catch (e) { /* 忽略 */ }
+}
+
+function sanitizeCams(list) {
+  const out = [];
+  const used = new Set();
+  for (const c of list) {
+    if (!c) continue;
+    let pages = Array.isArray(c.pages) ? c.pages.map(Number) : [];
+    if (!pages.length && c.no != null) pages = [Number(c.no)];
+    pages = pages.filter(n => PAGE_BY_NO.has(n) && !used.has(n));
+    if (!pages.length) continue;
+    pages.forEach(n => used.add(n));
+    const floor = FLOOR_BY_ID.has(c.floor) ? c.floor : (PAGE_BY_NO.has(pages[0]) ? sectionFloor(PAGE_BY_NO.get(pages[0])) : DEFAULT_FLOOR);
+    const f = FLOOR_BY_ID.get(floor);
+    const x = Number(c.x), y = Number(c.y);
+    if (!isFinite(x) || !isFinite(y)) continue;
+    let id = String(c.id || 'c' + pages[0]);
+    if (out.some(o => o.id === id)) id = 'c' + pages[0];
+    while (out.some(o => o.id === id)) id += '_';
+    out.push({
+      id,
+      pages: pages.sort((a, b) => a - b),
+      floor,
+      x: clamp(x, 0, f.w),
+      y: clamp(y, 0, f.h),
+      dir: normDir(Number(c.dir != null ? c.dir : (c.bearing != null ? c.bearing : 0)) || 0),
+      fov: clamp(Number(c.fov) || 65, 20, 150),
+      name: String(c.name || ''),
+      note: String(c.note || ''),
+      locked: !!c.locked
+    });
+  }
+  return out;
+}
+
+/* =========================================================
+   6. 视口（平移 / 缩放）
+   ========================================================= */
+function stageRect() { return stage.getBoundingClientRect(); }
+function toImage(clientX, clientY) {
+  const r = stageRect();
+  return {
+    x: (clientX - r.left - state.view.tx) / state.view.scale,
+    y: (clientY - r.top - state.view.ty) / state.view.scale
+  };
+}
+function toScreen(x, y) {
+  const r = stageRect();
+  return { x: x * state.view.scale + state.view.tx + r.left, y: y * state.view.scale + state.view.ty + r.top };
+}
+function fitView(pad = 26) {
+  const r = stageRect();
+  const w = state.planW || 1000, h = state.planH || 700;
+  if (r.width < 10 || r.height < 10) return;
+  const sc = Math.min((r.width - pad * 2) / w, (r.height - pad * 2) / h);
+  state.view = { scale: sc, tx: (r.width - w * sc) / 2, ty: (r.height - h * sc) / 2 };
+  state.viewTouched = false;
+  state.views[state.floor] = { ...state.view };
+  applyView();
+}
+function clampView() {
+  const r = stageRect();
+  const w = state.planW * state.view.scale, h = state.planH * state.view.scale;
+  const slack = 90;
+  if (w <= r.width - 2) state.view.tx = (r.width - w) / 2;
+  else state.view.tx = clamp(state.view.tx, r.width - w - slack, slack);
+  if (h <= r.height - 2) state.view.ty = (r.height - h) / 2;
+  else state.view.ty = clamp(state.view.ty, r.height - h - slack, slack);
+}
+function applyView(anim) {
+  if (anim) world.classList.add('anim');
+  world.style.transform = `translate3d(${state.view.tx}px,${state.view.ty}px,0) scale(${state.view.scale})`;
+  updateCounterScale();
+  updateZoomLabel();
+  if (anim) setTimeout(() => world.classList.remove('anim'), 280);
+}
+let lastCounterScale = 0;
+function updateCounterScale(force) {
+  const k = 1 / (state.view.scale || 1);
+  if (!force && Math.abs(k - lastCounterScale) < 1e-6) return;
+  lastCounterScale = k;
+  markerLayer.querySelectorAll('.mkbody').forEach(g => g.setAttribute('transform', `scale(${k})`));
+  draftLayer.querySelectorAll('.draftbody').forEach(g => g.setAttribute('transform', `scale(${k})`));
+}
+function updateZoomLabel() {
+  const el = $('#zoomVal');
+  if (el) el.textContent = Math.round(state.view.scale * 100) + '%';
+}
+function zoomAt(clientX, clientY, factor) {
+  const r = stageRect();
+  const v = state.view;
+  const ns = clamp(v.scale * factor, MIN_SCALE, MAX_SCALE);
+  if (Math.abs(ns - v.scale) < 1e-9) return;
+  const px = clientX - r.left, py = clientY - r.top;
+  v.tx = px - (px - v.tx) * (ns / v.scale);
+  v.ty = py - (py - v.ty) * (ns / v.scale);
+  v.scale = ns;
+  state.viewTouched = true;
+  clampView();
+  applyView();
+  state.views[state.floor] = { ...v };
+}
+function zoomCenter(factor) {
+  const r = stageRect();
+  zoomAt(r.left + r.width / 2, r.top + r.height / 2, factor);
+}
+function centerOn(x, y, anim = true) {
+  const r = stageRect();
+  state.view.tx = r.width / 2 - x * state.view.scale;
+  state.view.ty = r.height / 2 - y * state.view.scale;
+  state.viewTouched = true;
+  clampView();
+  applyView(anim);
+  state.views[state.floor] = { ...state.view };
+}
+function ensureVisible(cam) {
+  const r = stageRect();
+  const p = { x: cam.x * state.view.scale + state.view.tx, y: cam.y * state.view.scale + state.view.ty };
+  if (p.x < r.width * 0.08 || p.x > r.width * 0.92 || p.y < r.height * 0.1 || p.y > r.height * 0.9) {
+    centerOn(cam.x, cam.y, true);
+  }
+}
+
+/* =========================================================
+   7. 平面图加载 / 楼层切换
+   ========================================================= */
+function setFloor(id, opts = {}) {
+  if (!FLOOR_BY_ID.has(id)) return;
+  const changed = state.floor !== id;
+  state.floor = id;
+  state.prefs.floor = id;
+  const f = FLOOR_BY_ID.get(id);
+  state.planW = f.w; state.planH = f.h;
+  world.style.width = f.w + 'px';
+  world.style.height = f.h + 'px';
+  overlay.setAttribute('viewBox', `0 0 ${f.w} ${f.h}`);
+  hideTip();
+
+  const cached = state.planCache[id];
+  if (cached && cached.ok) {
+    planImg.src = planSrc(f);
+    planImg.hidden = false;
+    planFail.hidden = true;
+  } else {
+    loadPlan(id);
+  }
+
+  if (changed) {
+    if (state.views[id] && !opts.fit) {
+      state.view = { ...state.views[id] };
+      clampView();
+      applyView();
+    } else {
+      fitView();
+    }
+  } else if (opts.fit) {
+    fitView();
+  }
+  if (!state.view.scale || !isFinite(state.view.scale)) fitView();
+
+  renderFloorTabs();
+  renderMarkers();
+  renderHud();
+  updateZoomLabel();
+}
+
+function loadPlan(id, cb) {
+  const f = FLOOR_BY_ID.get(id);
+  const img = new Image();
+  img.decoding = 'async';
+  img.onload = () => {
+    state.planCache[id] = { ok: true, img };
+    if (id === state.floor) {
+      planImg.src = img.src;
+      planImg.hidden = false;
+      planFail.hidden = true;
+      if (img.naturalWidth && img.naturalHeight && (img.naturalWidth !== state.planW || img.naturalHeight !== state.planH)) {
+        state.planW = img.naturalWidth;
+        state.planH = img.naturalHeight;
+        world.style.width = state.planW + 'px';
+        world.style.height = state.planH + 'px';
+        overlay.setAttribute('viewBox', `0 0 ${state.planW} ${state.planH}`);
+        if (!state.viewTouched) fitView();
+      }
+      renderMarkers();
+    }
+    if (cb) cb(true);
+  };
+  img.onerror = () => {
+    state.planCache[id] = { ok: false };
+    if (id === state.floor) {
+      planImg.hidden = true;
+      planFail.hidden = false;
+      const p = $('#failPath');
+      if (p) p.textContent = BASE + f.plan;
+    }
+    if (cb) cb(false);
+  };
+  img.src = planSrc(f);
+}
+
+/* =========================================================
+   8. 标记渲染
+   ========================================================= */
+function wedgePath(dir, fov, R) {
+  const half = Math.max(2, Math.min(150, fov)) / 2 * Math.PI / 180;
+  const a = dirVecRad(dir);
+  const x1 = Math.sin(a - half) * R, y1 = -Math.cos(a - half) * R;
+  const x2 = Math.sin(a + half) * R, y2 = -Math.cos(a + half) * R;
+  const large = fov > 180 ? 1 : 0;
+  return `M0 0L${f2(x1)} ${f2(y1)}A${R} ${R} 0 ${large} 1 ${f2(x2)} ${f2(y2)}Z`;
+}
+
+function markerBody(cam, sel, showLabel) {
+  const pinR = sel ? 14 : 11.5;
+  const p = PAGE_BY_NO.get(cam.pages[0]);
+  const room = p ? p.room : '';
+  const low = p && p.conf === 'low';
+  const label = showLabel && room
+    ? `<text class="plabel" x="${pinR + 6}" y="0">${esc(room)}</text>` : '';
+  return `
+    <circle class="hit" r="18"/>
+    ${sel ? `<circle r="${pinR + 7.5}" fill="none" stroke="rgba(176,84,60,.26)" stroke-width="1.3"/>` : ''}
+    <circle r="${pinR + 2.2}" fill="rgba(255,253,248,.92)"/>
+    <circle class="pin" r="${pinR}" fill="${sel ? '#b0543c' : '#2b3034'}"/>
+    <text class="pnum" y=".5" font-size="${sel ? 10 : 9}">${srcNum(cam.pages[0])}</text>
+    ${low ? `<circle class="flag" cx="${f2(pinR * 0.74)}" cy="${f2(-pinR * 0.74)}" r="3.6" fill="#a9772a"/>` : ''}
+    ${cam.locked ? `<circle class="lockdot" cx="${f2(-pinR * 0.74)}" cy="${f2(-pinR * 0.74)}" r="3.2" fill="#2e5b4c"/>` : ''}
+    ${label}`;
+}
+
+function makeMarker(cam, sel, showLabel) {
+  const g = document.createElementNS(NS, 'g');
+  g.setAttribute('class', 'mk' + (sel ? ' sel' : '') + (cam.locked ? ' locked' : ''));
+  g.setAttribute('data-cam', cam.id);
+  g.setAttribute('transform', `translate(${f2(cam.x)} ${f2(cam.y)})`);
+  const body = document.createElementNS(NS, 'g');
+  body.setAttribute('class', 'mkbody');
+  body.setAttribute('transform', `scale(${1 / state.view.scale})`);
+  body.innerHTML = markerBody(cam, sel, showLabel);
+  g.appendChild(body);
+  return g;
+}
+
+function textWidth(s, size) {
+  let w = 0;
+  for (const ch of String(s)) w += /[\u3000-\u9fff\uff00-\uffef]/.test(ch) ? size : size * 0.57;
+  return w;
+}
+function boxHit(a, b) {
+  return a.x1 < b.x2 && a.x2 > b.x1 && a.y1 < b.y2 && a.y2 > b.y1;
+}
+
+function renderMarkers() {
+  if (!markerLayer) return;
+  markerLayer.innerHTML = '';
+  const cams = camsOnFloor(state.floor).slice().sort((a, b) => a.pages[0] - b.pages[0]);
+  const sel = selectedCam();
+  const k = 1 / state.view.scale;
+  const ordered = cams.filter(c => !sel || c.id !== sel.id);
+  if (sel && sel.floor === state.floor) ordered.push(sel);
+
+  // 标签避让：先占位所有圆点，再按优先级放置放得下的标签
+  const showLabel = new Map();
+  if (state.prefs.labels) {
+    const pinBoxes = ordered.map(c => {
+      const r = (c === sel ? 14 : 11.5) + 2.5;
+      return { x1: c.x - r * k, y1: c.y - r * k, x2: c.x + r * k, y2: c.y + r * k };
+    });
+    const labelBoxes = [];
+    const priority = [...ordered].sort((a, b) => ((b === sel) - (a === sel)) || (a.pages[0] - b.pages[0]));
+    for (const c of priority) {
+      const p = PAGE_BY_NO.get(c.pages[0]);
+      if (!p || !p.room) continue;
+      const pinR = c === sel ? 14 : 11.5;
+      const x1 = c.x + (pinR + 6) * k;
+      const box = { x1, y1: c.y - 6 * k, x2: x1 + textWidth(p.room, 10) * k, y2: c.y + 6 * k };
+      if (pinBoxes.some(b => boxHit(b, box))) continue;
+      if (labelBoxes.some(b => boxHit(b, box))) continue;
+      labelBoxes.push(box);
+      showLabel.set(c.id, true);
+    }
+  }
+
+  for (const c of ordered) markerLayer.appendChild(makeMarker(c, c === sel, !!showLabel.get(c.id)));
+  lastCounterScale = 0;
+  updateCounterScale(true);
+}
+function paintMarker(cam) {
+  const g = markerLayer.querySelector(`[data-cam="${cam.id}"]`);
+  if (!g) return;
+  const sel = g.classList.contains('sel');
+  g.setAttribute('transform', `translate(${f2(cam.x)} ${f2(cam.y)})`);
+  const body = g.querySelector('.mkbody');
+  if (body) {
+    body.setAttribute('transform', `scale(${1 / state.view.scale})`);
+    body.innerHTML = markerBody(cam, sel, state.prefs.labels);
+  }
+}
+
+function draftHTML(no, dir) {
+  return `<circle r="11" fill="rgba(176,84,60,.18)" stroke="rgba(176,84,60,.7)" stroke-width="1.4"/>
+    <circle r="4.2" fill="#b0543c"/>
+    <path class="cross" d="M-7 0h14M0-7v14" stroke="rgba(176,84,60,.55)" stroke-width="1.1"/>
+    <text class="dnum" x="15" y="-7">${esc(srcLabel(no))}</text>`;
+}
+function renderDraft() {
+  draftLayer.innerHTML = '';
+  const d = state.drag;
+  if (!d || d.type !== 'place') return;
+  const g = document.createElementNS(NS, 'g');
+  g.setAttribute('transform', `translate(${f2(d.x)} ${f2(d.y)})`);
+  const body = document.createElementNS(NS, 'g');
+  body.setAttribute('class', 'draftbody');
+  body.setAttribute('transform', `scale(${1 / state.view.scale})`);
+  body.innerHTML = draftHTML(d.pageNo, 0);
+  g.appendChild(body);
+  draftLayer.appendChild(g);
+}
+
+/* =========================================================
+   9. 列表 / 计数
+   ========================================================= */
+function visiblePages() {
+  const q = state.q.trim().toLowerCase();
+  return PAGES.filter(p => {
+    const has = !!camForPage(p.no);
+    if (state.filter === 'todo' && has) return false;
+    if (state.filter === 'done' && !has) return false;
+    if (state.filter === 'low' && p.conf !== 'low') return false;
+    if (q) {
+      const hay = (p.room + ' ' + p.view + ' ' + p.note + ' ' + p.file + ' p' + p.no + ' ' + p.no).toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function rowHTML(p) {
+  const cam = camForPage(p.no);
+  const sel = state.page === p.no;
+  const low = p.conf === 'low';
+  return `<button class="row${cam ? ' done' : ''}${sel ? ' sel' : ''}" data-page="${p.no}" title="${esc(srcFile(p.no))} · ${esc(p.room)}">
+    <span class="pno">${srcNum(p.no)}</span>
+    <span class="rmain"><span class="rroom">${esc(p.room)}</span><span class="rview">${esc(p.view)}</span></span>
+    ${low ? '<span class="rflag">存疑</span>' : ''}
+    <span class="rstate">${cam ? '<svg class="i"><use href="#ico-check"/></svg>' : ''}</span>
+  </button>`;
+}
+
+function renderList() {
+  const items = visiblePages();
+  const st = listEl.scrollTop;
+  let html = '';
+  if (state.sort === 'room') {
+    const groups = new Map();
+    for (const p of items) {
+      const key = p.sec + '|' + p.room;
+      if (!groups.has(key)) groups.set(key, { room: p.room, floor: sectionFloor(p), pages: [] });
+      groups.get(key).pages.push(p);
+    }
+    for (const g of groups.values()) {
+      const done = g.pages.filter(p => camForPage(p.no)).length;
+      html += `<div class="ghead"><b>${esc(g.room)}</b><span class="gfloor">${floorShort(g.floor)}</span><span class="gmeta">${done}/${g.pages.length}</span></div>`;
+      html += g.pages.map(rowHTML).join('');
+    }
+  } else {
+    html = items.map(rowHTML).join('');
+  }
+  if (!items.length) {
+    html = `<div class="empty-list">没有匹配的全景<br>试试清空搜索或切换筛选</div>`;
+  }
+  listEl.innerHTML = html;
+  listEl.scrollTop = st;
+  renderCounts();
+}
+
+function syncListSel(scroll) {
+  listEl.querySelectorAll('.row.sel').forEach(el => el.classList.remove('sel'));
+  const row = listEl.querySelector(`.row[data-page="${state.page}"]`);
+  if (row) {
+    row.classList.add('sel');
+    if (scroll) row.scrollIntoView({ block: 'nearest' });
+  }
+}
+
+function renderCounts() {
+  const done = PAGES.filter(p => camForPage(p.no)).length;
+  const todo = TOTAL - done;
+  const low = PAGES.filter(p => p.conf === 'low').length;
+  const set = (k, n) => {
+    const b = filtersEl.querySelector(`[data-filter="${k}"] em`);
+    if (b) b.textContent = n;
+  };
+  set('all', TOTAL); set('todo', todo); set('done', done); set('low', low);
+  filtersEl.querySelectorAll('[data-filter]').forEach(b => b.classList.toggle('on', b.dataset.filter === state.filter));
+  $('#doneCount').textContent = done;
+  $('#totalCount').textContent = TOTAL;
+  $('#pbarFill').style.width = (TOTAL ? done / TOTAL * 100 : 0) + '%';
+  $('#listCount').textContent = `${TOTAL} 张`;
+  $('#pfootText').textContent = `已标 ${done} / ${TOTAL}`;
+  const clearBtn = $('#btnClear');
+  if (clearBtn) {
+    clearBtn.disabled = state.cams.length === 0;
+    clearBtn.title = state.cams.length ? `清空所有标注（${state.cams.length} 个点位）` : '清空所有标注';
+  }
+}
+
+function renderFloorTabs() {
+  floorTabs.innerHTML = FLOORS.map((f, i) => {
+    const pages = PAGES.filter(p => sectionFloor(p) === f.id);
+    const done = pages.filter(p => camForPage(p.no)).length;
+    return `<button class="ftab${state.floor === f.id ? ' on' : ''}" data-floor="${f.id}" role="tab" aria-selected="${state.floor === f.id}" title="${esc(f.name)} · 快捷键 ${i + 1}">
+      <span>${esc(f.title)}</span><span class="fnum"><span class="${done ? 'fdone' : ''}">${done}</span>/${pages.length}</span>
+    </button>`;
+  }).join('');
+}
+
+function renderHud() {
+  const f = FLOOR_BY_ID.get(state.floor);
+  const pages = PAGES.filter(p => sectionFloor(p) === f.id);
+  const done = pages.filter(p => camForPage(p.no)).length;
+  $('#hudFloorName').textContent = f.title;
+  $('#hudFloorCount').textContent = `已标注 ${done} / ${pages.length}`;
+  renderHint();
+  renderOnboard();
+}
+
+function renderHint() {
+  let html;
+  if (state.drag && state.drag.type === 'place') {
+    html = `正在放置 <b>${esc(srcFile(state.drag.pageNo))}</b> · 松开完成点位`;
+  } else if (state.armed && state.page != null) {
+    html = `为 <b>${esc(srcFile(state.page))} · ${esc(roomOf(state.page))}</b> 选位置：在平面上单击放置全景点位`;
+  } else if (selectedCam()) {
+    html = `拖动圆点移动点位 <span class="dim">·</span> <kbd>Delete</kbd>删除 <span class="dim">·</span> 箭头键微调`;
+  } else {
+    html = `<kbd>单击</kbd>放置全景点位 <span class="dim">·</span> <kbd>空格</kbd>平移 <span class="dim">·</span> <kbd>滚轮</kbd>缩放`;
+  }
+  hintEl.innerHTML = html;
+}
+
+function renderOnboard() {
+  if (state.cams.length || state.prefs.onboarded) { onboardEl.innerHTML = ''; return; }
+  const first = PAGES.find(p => !camForPage(p.no));
+  onboardEl.innerHTML = `<div class="ob">
+    <div class="kicker">Camera plotting</div>
+    <h3>把 ${TOTAL} 张实景全景<br>标到平面图上</h3>
+    <ol>
+      <li>左侧选一张全景，右侧即出现这张图</li>
+      <li>在平面图上<b>单击</b>落下全景点位</li>
+      <li>松开后自动跳到下一张，一路标下去</li>
+    </ol>
+    <div class="obrow">
+      <button class="btn primary" id="obStart">从 ${first ? esc(srcFile(first.no)) : '第一张'} 开始</button>
+      <button class="btn ghost" id="obSkip">先看看</button>
+      <span class="dim">数据只存在本机</span>
+    </div>
+  </div>`;
+  const start = $('#obStart'), skip = $('#obSkip');
+  if (start) start.onclick = () => { if (first) openPage(first.no); };
+  if (skip) skip.onclick = () => { state.prefs.onboarded = true; saveSoon(); renderOnboard(); };
+}
+
+/* =========================================================
+   10. 当前页 / 选中
+   ========================================================= */
+function openPage(no, opts = {}) {
+  const p = PAGE_BY_NO.get(no);
+  if (!p) return;
+  const cam = camForPage(no);
+  state.page = no;
+  state.armed = !cam;
+  const target = cam ? cam.floor : sectionFloor(p);
+  const switched = target !== state.floor;
+  state.prefs.page = no;
+  saveSoon();
+  if (switched) setFloor(target);
+  renderAll();
+  if (cam) ensureVisible(cam);
+  syncListSel(true);
+  if (switched && !opts.silent) toast(`已切换到“${floorTitle(target)}”平面`, 1500);
+}
+
+function renderAll() {
+  renderCounts();
+  renderFloorTabs();
+  renderList();
+  renderMarkers();
+  renderHud();
+  renderInspector();
+  syncListSel(false);
+}
+
+function closePage() {
+  state.page = null;
+  state.armed = false;
+  state.prefs.page = null;
+  saveSoon();
+  renderAll();
+}
+
+/* =========================================================
+   11. 机位增删改
+   ========================================================= */
+function snapshot() {
+  state.undo.push(JSON.stringify({ cams: state.cams }));
+  if (state.undo.length > 120) state.undo.shift();
+  state.redo.length = 0;
+  updateHistoryButtons();
+}
+function mutate(fn) {
+  snapshot();
+  fn();
+  saveSoon();
+}
+function undo() {
+  if (!state.undo.length) return;
+  state.redo.push(JSON.stringify({ cams: state.cams }));
+  state.cams = JSON.parse(state.undo.pop()).cams;
+  if (state.page != null) state.armed = !camForPage(state.page);
+  saveNow();
+  renderAll();
+  updateHistoryButtons();
+}
+function redo() {
+  if (!state.redo.length) return;
+  state.undo.push(JSON.stringify({ cams: state.cams }));
+  state.cams = JSON.parse(state.redo.pop()).cams;
+  if (state.page != null) state.armed = !camForPage(state.page);
+  saveNow();
+  renderAll();
+  updateHistoryButtons();
+}
+function updateHistoryButtons() {
+  $('#btnUndo').disabled = !state.undo.length;
+  $('#btnRedo').disabled = !state.redo.length;
+}
+
+function defaultDir(no) {
+  const room = roomOf(no);
+  let best = null;
+  for (const c of state.cams) {
+    if (c.floor === state.floor && roomOf(c.pages[0]) === room) best = c;
+  }
+  return best ? best.dir : 0;
+}
+
+function pickTarget() {
+  // 选中的那张图还没标 → 就标它；楼层不一致由 beginPlace 切过去，不替用户跳去别的图
+  if (state.page != null && !camForPage(state.page)) return state.page;
+  const onFloor = PAGES.filter(p => sectionFloor(p) === state.floor && !camForPage(p.no));
+  if (onFloor.length) return onFloor[0].no;
+  const rest = PAGES.find(p => !camForPage(p.no));
+  return rest ? rest.no : null;
+}
+
+function commitPlace(d) {
+  const no = d.pageNo;
+  const x = clamp(d.x, 0, state.planW), y = clamp(d.y, 0, state.planH);
+  const cam = {
+    id: 'c' + no, pages: [no], floor: state.floor,
+    x: +x.toFixed(1), y: +y.toFixed(1),
+    dir: null, fov: null,
+    name: '', note: '', locked: false
+  };
+  if (DUP_OF[no] && !camForPage(DUP_OF[no])) cam.pages.push(DUP_OF[no]);
+  for (const [dup, orig] of Object.entries(DUP_OF)) {
+    if (Number(orig) === no && !camForPage(Number(dup)) && !cam.pages.includes(Number(dup))) cam.pages.push(Number(dup));
+  }
+  cam.pages.sort((a, b) => a - b);
+  mutate(() => {
+    state.cams.push(cam);
+    state.page = no;
+    state.armed = false;
+    state.prefs.onboarded = true;
+  });
+  renderAll();
+  const extra = cam.pages.length > 1 ? `（并自动关联同图 ${cam.pages.slice(1).map(n => srcFile(n)).join('、')}）` : '';
+  toast(`${srcFile(no)} 已标点位${extra}`, 1800);
+  if (state.prefs.autoNext) setTimeout(() => advance(no), 120);
+}
+
+function advance(fromNo) {
+  if (state.drag) return;
+  const idx = PAGE_INDEX.has(fromNo) ? PAGE_INDEX.get(fromNo) : -1;
+  for (let i = 1; i <= PAGES.length; i++) {
+    const p = PAGES[(idx + i) % PAGES.length];
+    if (!camForPage(p.no)) { openPage(p.no); return; }
+  }
+  toast('全部 ' + TOTAL + ' 张全景都已标注完成', 3000);
+}
+
+function deleteCam(cam) {
+  if (!cam) return;
+  const label = cam.pages.map(n => srcFile(n)).join('、');
+  const primary = cam.pages[0];
+  mutate(() => {
+    state.cams = state.cams.filter(c => c.id !== cam.id);
+    if (state.page != null && cam.pages.includes(state.page)) state.armed = true;
+  });
+  renderAll();
+  toast(`已删除 ${label} 的点位 · Ctrl+Z 可撤销`, 2400);
+}
+
+function deleteSelected() {
+  const cam = selectedCam();
+  if (cam) deleteCam(cam);
+}
+
+async function clearAllCams() {
+  const camCount = state.cams.length;
+  if (!camCount) { toast('还没有标注任何点位', 1800); return; }
+  const pageCount = new Set(state.cams.flatMap(c => c.pages)).size;
+  const floorCount = new Set(state.cams.map(c => c.floor)).size;
+  const ok = await confirmDialog({
+    title: '清空所有标注？',
+    body: `<p>将删除全部 <b>${camCount}</b> 个点位，涉及 <b>${pageCount}</b> 张全景、<b>${floorCount}</b> 张平面图。平面图与全景文件本身不受影响。</p>
+      <p>清空后仍可用 <b>Ctrl+Z</b> 撤销。如果这批标注还要用，建议先“导出 → JSON”备份。</p>`,
+    ok: '清空所有', danger: true
+  });
+  if (!ok) return;
+  mutate(() => {
+    state.cams = [];
+    if (state.page != null) state.armed = true;
+  });
+  saveNow();
+  renderAll();
+  toast(`已清空 ${camCount} 个点位 · Ctrl+Z 可撤销`, 3200);
+}
+
+function focusCam(cam) {
+  if (!cam) return;
+  centerOn(cam.x, cam.y, true);
+}
+
+/* =========================================================
+   12. 检查器
+   ========================================================= */
+function confLabel(conf) {
+  return { high: '高置信', mid: '中置信', low: '低置信', dup: '重复页', none: '—' }[conf] || '—';
+}
+
+function renderInspector() {
+  const no = state.page;
+  if (no == null) {
+    inspect.innerHTML = emptyInspectorHTML();
+    bindEmptyInspector();
+    return;
+  }
+  const p = PAGE_BY_NO.get(no);
+  const cam = camForPage(no);
+  const st = inspect.scrollTop;
+  const conf = p.conf;
+  const primary = cam ? cam.pages[0] : no;
+  const extraPages = cam ? cam.pages.filter(n => n !== primary) : [];
+
+  let html = `<div class="prev">
+    <img id="prevImg" src="${pageSrc(p)}" alt="${esc(srcFile(p.no))} ${esc(p.room)}" loading="eager" decoding="async">
+    <div class="prevempty" id="prevEmpty" hidden>图片未找到</div>
+    <div class="pbadge"><span class="pno2">${esc(srcLabel(p.no))}</span><span class="conf ${conf}">${confLabel(conf)}</span></div>
+    <button class="expand" id="btnPrevExpand" title="放大查看（空格）"><svg class="i"><use href="#ico-expand"/></svg></button>
+  </div>
+  <div class="meta">
+    <h2>${esc(p.room)}</h2>
+    <p class="view">${esc(p.view)}</p>
+    <div class="tags">
+      <span class="tag">${esc(floorTitle(sectionFloor(p)))}</span>
+      ${p.note ? `<span class="tag amber">归档备注：${esc(p.note)}</span>` : ''}
+      ${cam && cam.pages.length > 1 ? `<span class="tag green">关联 ${cam.pages.length} 张</span>` : ''}
+      ${cam && cam.locked ? `<span class="tag">已锁定</span>` : ''}
+    </div>
+    <p class="path">${esc(p.file)}</p>
+  </div>`;
+
+  html += `<div class="sect">
+    <h3><span class="bar"></span>全景点位<span class="right">${cam ? '已定位' : '待放置'}</span></h3>`;
+
+  if (!cam) {
+    html += `<div class="armbox">
+      <div class="crossic"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/><circle cx="12" cy="12" r="3.2"/></svg></div>
+      <b>在平面图上单击放置</b>
+      <p>单击平面即可落下全景点位；按住拖动可微调落点，松开完成。实景全景不需要朝向与视场角。</p>
+      <p class="dim" style="color:var(--muted);font-size:10.5px">当前平面：${esc(floorTitle(state.floor))}</p>
+    </div>
+    <div class="field"><span class="flabel">这张图所在楼层</span><div class="grow">
+      <select id="armFloor">${FLOORS.map(f => `<option value="${f.id}"${f.id === sectionFloor(p) ? ' selected' : ''}>${esc(f.title)}</option>`).join('')}</select>
+    </div></div>`;
+  } else {
+    html += `<div class="readout">
+      <div><label>X</label><b id="roX">${Math.round(cam.x)}</b><small>px</small></div>
+      <div><label>Y</label><b id="roY">${Math.round(cam.y)}</b><small>px</small></div>
+      
+    </div>
+    <div class="field"><span class="flabel">图纸</span><div class="grow">
+      <select id="camFloor">${FLOORS.map(f => `<option value="${f.id}"${f.id === cam.floor ? ' selected' : ''}>${esc(f.title)}</option>`).join('')}</select>
+    </div></div>
+    <div class="field"><span class="flabel"></span><div class="grow presets" id="fovPresets">
+      ${[45, 65, 90, 110].map(v => `<button data-fov="${v}" class="${Math.round(cam.fov) === v ? 'on' : ''}">${v}°</button>`).join('')}
+    </div></div>
+    <div class="field"><span class="flabel">点位名</span><div class="grow">
+      <input type="text" id="camName" value="${esc(cam.name)}" placeholder="可选，如“沙发区向壁炉”" maxlength="40">
+    </div></div>
+    <div class="field"><span class="flabel">关联页</span><div class="grow">
+      <div class="links" id="pageLinks">
+        ${cam.pages.map(n => `<span class="chip">${esc(srcLabel(n))}${cam.pages.length > 1 ? `<button data-unlink="${n}" title="取消关联">✕</button>` : ''}</span>`).join('')}
+        <button class="chip add" id="btnLink">+ 关联</button>
+      </div>
+    </div></div>
+    <div class="camactions">
+      <button class="btn" id="btnFocus"><svg class="i"><use href="#ico-target"/></svg>定位</button>
+      <button class="btn" id="btnLock"><svg class="i"><use href="${cam.locked ? '#ico-unlock' : '#ico-lock'}"/></svg>${cam.locked ? '解锁' : '锁定'}</button>
+      <button class="btn danger" id="btnDelete"><svg class="i"><use href="#ico-trash"/></svg>删除</button>
+    </div>`;
+  }
+  html += `</div>
+  <div class="pager">
+    <button class="btn" id="btnPrevPage" ${PAGE_INDEX.get(no) === 0 ? 'disabled' : ''}><svg class="i"><use href="#ico-left"/></svg>上一张</button>
+    <button class="btn" id="btnNextPage" ${PAGE_INDEX.get(no) === PAGES.length - 1 ? 'disabled' : ''}>下一张<svg class="i"><use href="#ico-right"/></svg></button>
+  </div>`;
+
+  inspect.innerHTML = html;
+  inspect.scrollTop = st;
+  bindInspector(p, cam);
+
+  const img = $('#prevImg'), empty = $('#prevEmpty');
+  if (img) img.onerror = () => { img.style.visibility = 'hidden'; if (empty) empty.hidden = false; };
+}
+
+function compassHTML(dir) {
+  const d = Math.round(normDir(dir));
+  const items = [
+    [315, '↖'], [0, '↑'], [45, '↗'],
+    [270, '←'], [null, null], [90, '→'],
+    [225, '↙'], [180, '↓'], [135, '↘']
+  ];
+  return items.map(([v, ch]) => v == null
+    ? `<button class="mid" data-dir="0" title="0°（图纸上方）">${d}°</button>`
+    : `<button data-dir="${v}" class="${Math.abs(((d - v + 540) % 360) - 180) < 0.5 ? 'cur' : ''}" title="${v}°"><span class="arr">${ch}</span></button>`
+  ).join('');
+}
+
+function emptyInspectorHTML() {
+  const done = PAGES.filter(p => camForPage(p.no)).length;
+  const todo = TOTAL - done;
+  const cams = state.cams.length;
+  const low = PAGES.filter(p => p.conf === 'low').length;
+  return `<div class="emptypanel">
+    <div class="big">选择左侧任意一张全景</div>
+    <p>右侧会出现画面与点位参数；<br>在平面图上按下拖动即可标注。</p>
+  </div>
+  <div class="mini">
+    <div><label>全景</label><b>${TOTAL}</b></div>
+    <div><label>已标注</label><b style="color:var(--green)">${done}</b></div>
+    <div><label>待标注</label><b>${todo}</b></div>
+    <div><label>点位</label><b>${cams}</b></div>
+  </div>
+  <div class="sect" style="border-top:0;margin-top:14px">
+    <h3><span class="bar"></span>各层进度</h3>
+    ${FLOORS.map(f => {
+      const pages = PAGES.filter(p => sectionFloor(p) === f.id);
+      const d = pages.filter(p => camForPage(p.no)).length;
+      const pct = pages.length ? Math.round(d / pages.length * 100) : 0;
+      return `<div style="margin:9px 0">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink-2);margin-bottom:4px">
+          <span>${esc(f.title)}</span><span class="mono" style="color:var(--muted);font:10.5px var(--mono)">${d}/${pages.length} · ${pct}%</span>
+        </div>
+        <div class="pbar" style="height:4px"><i style="width:${pct}%;background:${f.id === state.floor ? 'var(--accent)' : 'var(--green)'}"></i></div>
+      </div>`;
+    }).join('')}
+    <button class="btn primary" id="emptyNext" style="width:100%;margin-top:10px" ${todo ? '' : 'disabled'}>继续标注下一张未标注</button>
+  </div>
+  ${low ? `<div class="sect" style="border-top:1px solid var(--line)"><h3><span class="bar"></span>提示</h3>
+    <p style="font-size:11px;line-height:1.75;color:var(--muted);margin:0">有 ${low} 张全景的空间归属存疑（列表中带“存疑”标记），标注时可留意。</p></div>` : ''}`;
+}
+
+function bindEmptyInspector() {
+  const next = $('#emptyNext');
+  if (next) next.onclick = () => {
+    const p = PAGES.find(x => !camForPage(x.no));
+    if (p) openPage(p.no);
+  };
+}
+
+function bindInspector(p, cam) {
+  const expand = $('#btnPrevExpand');
+  if (expand) expand.onclick = () => openLightbox(p.no);
+  const pv = $('#prevImg');
+  if (pv) pv.onclick = () => openLightbox(p.no);
+  const prev = $('#btnPrevPage'), next = $('#btnNextPage');
+  if (prev) prev.onclick = () => goPage(-1);
+  if (next) next.onclick = () => goPage(1);
+  const armFloor = $('#armFloor');
+  if (armFloor) armFloor.onchange = () => {
+    const f = armFloor.value;
+    // 这个下拉框改的是“这张全景属于哪一层”，不只是切换平面。
+    // 必须记进偏好吗，否则改完一拖会被判定成“本层没有待标的图”而弹回去。
+    state.prefs.pageFloor = state.prefs.pageFloor || {};
+    state.prefs.pageFloor[p.no] = f;
+    if (cam && cam.floor !== f) mutate(() => { cam.floor = f; });
+    saveSoon();
+    if (f !== state.floor) setFloor(f, { fit: true });
+    renderAll();
+    toast(`${esc(srcFile(p.no))} 已改到“${floorTitle(f)}”`, 1800);
+  };
+  if (!cam) return;
+
+  const dirRange = $('#dirRange'), dirNum = $('#dirNum'), fovRange = $('#fovRange');
+  const setDir = (val, snap) => {
+    let d = normDir(Number(val));
+    if (snap) d = normDir(Math.round(d / 15) * 15);
+    cam.dir = +d.toFixed(1);
+    if (dirRange) dirRange.value = Math.round(d);
+    if (dirNum) dirNum.value = Math.round(d);
+    const ro = $('#roDir'); if (ro) ro.textContent = Math.round(d);
+    const cp = $('#compass'); if (cp) cp.innerHTML = compassHTML(d);
+    paintMarker(cam);
+    updateRangeFill(dirRange);
+    saveSoon();
+  };
+  if (dirRange) {
+    dirRange.style.setProperty('--fill', (cam.dir / 359 * 100) + '%');
+    dirRange.onpointerdown = () => { snapshotOnce('dir'); };
+    dirRange.oninput = () => setDir(dirRange.value, false);
+  }
+  if (dirNum) {
+    dirNum.onchange = () => { snapshot(); setDir(dirNum.value, false); };
+  }
+  const compass = $('#compass');
+  if (compass) compass.onclick = e => {
+    const b = e.target.closest('[data-dir]');
+    if (!b) return;
+    snapshot();
+    setDir(+b.dataset.dir, false);
+    renderInspector();
+  };
+  if (fovRange) {
+    fovRange.style.setProperty('--fill', ((cam.fov - 20) / 130 * 100) + '%');
+    fovRange.onpointerdown = () => snapshotOnce('fov');
+    fovRange.oninput = () => {
+      cam.fov = clamp(+fovRange.value, 20, 150);
+      const v = $('#fovVal'); if (v) v.textContent = Math.round(cam.fov) + '°';
+      fovRange.style.setProperty('--fill', ((cam.fov - 20) / 130 * 100) + '%');
+      document.querySelectorAll('#fovPresets button').forEach(b => b.classList.toggle('on', +b.dataset.fov === Math.round(cam.fov)));
+      paintMarker(cam);
+      saveSoon();
+    };
+  }
+  const fovPresets = $('#fovPresets');
+  if (fovPresets) fovPresets.onclick = e => {
+    const b = e.target.closest('[data-fov]');
+    if (!b) return;
+    snapshot();
+    cam.fov = +b.dataset.fov;
+    saveSoon();
+    renderInspector();
+    paintMarker(cam);
+  };
+  const name = $('#camName');
+  if (name) {
+    name.onfocus = () => snapshotOnce('name');
+    name.oninput = () => { cam.name = name.value; saveSoon(); };
+  }
+  const floorSel = $('#camFloor');
+  if (floorSel) floorSel.onchange = () => {
+    snapshot();
+    cam.floor = floorSel.value;
+    const f = FLOOR_BY_ID.get(cam.floor);
+    cam.x = clamp(cam.x, 0, f.w);
+    cam.y = clamp(cam.y, 0, f.h);
+    saveSoon();
+    if (cam.floor !== state.floor) setFloor(cam.floor);
+    renderAll();
+  };
+  const links = $('#pageLinks');
+  if (links) links.onclick = e => {
+    const un = e.target.closest('[data-unlink]');
+    if (un) {
+      const n = +un.dataset.unlink;
+      snapshot();
+      cam.pages = cam.pages.filter(x => x !== n);
+      if (n === state.page) state.armed = true;
+      saveSoon();
+      renderAll();
+      return;
+    }
+    if (e.target.closest('#btnLink')) openLinkPicker(cam);
+  };
+  const focus = $('#btnFocus'); if (focus) focus.onclick = () => focusCam(cam);
+  const lock = $('#btnLock'); if (lock) lock.onclick = () => {
+    snapshot(); cam.locked = !cam.locked; saveSoon(); renderAll();
+    toast(cam.locked ? '已锁定，拖动不会移动点位' : '已解锁', 1500);
+  };
+  const del = $('#btnDelete'); if (del) del.onclick = () => deleteCam(cam);
+}
+
+function updateRangeFill(el) {
+  if (!el) return;
+  const min = +el.min || 0, max = +el.max || 100;
+  el.style.setProperty('--fill', ((+el.value - min) / (max - min) * 100) + '%');
+}
+
+/* 连续拖动滑块时只记录一次撤销点 */
+let onceKey = null;
+function snapshotOnce(key) {
+  if (onceKey === key) return;
+  onceKey = key;
+  snapshot();
+}
+document.addEventListener('pointerup', () => { onceKey = null; });
+
+function goPage(delta) {
+  if (state.page == null) return;
+  const i = PAGE_INDEX.get(state.page);
+  const p = PAGES[clamp(i + delta, 0, PAGES.length - 1)];
+  if (p) openPage(p.no);
+}
+
+/* =========================================================
+   13. 放置 / 拖动 / 旋转
+   ========================================================= */
+function beginPan(e) {
+  state.drag = { type: 'pan', sx: e.clientX, sy: e.clientY, tx: state.view.tx, ty: state.view.ty };
+  stage.classList.add('panning');
+  try { stage.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+}
+function beginMove(e, cam) {
+  if (cam.locked) {
+    state.page = cam.pages[0];
+    state.armed = false;
+    renderAll();
+    syncListSel(true);
+    toast('点位已锁定，解锁后才能移动', 1600);
+    return;
+  }
+  state.page = cam.pages[0];
+  state.armed = false;
+  state.drag = {
+    type: 'move', cam, sx: e.clientX, sy: e.clientY,
+    ox: cam.x, oy: cam.y, start: toImage(e.clientX, e.clientY)
+  };
+  snapshot();
+  syncListSel(true);
+  renderInspector();
+  state.armed = false;
+  try { stage.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+}
+function beginRotate(e, cam) {
+  // 实景全景不需要朝向：点到圆点时改为移动
+  beginMove(e, cam);
+}
+function beginPlace(e) {
+  const target = pickTarget();
+  if (target == null) {
+    toast('所有全景都已标注完成', 2000);
+    return;
+  }
+  const targetFloor = sectionFloor(PAGE_BY_NO.get(target));
+  if (targetFloor !== state.floor) setFloor(targetFloor, { fit: true });
+  const pt = toImage(e.clientX, e.clientY);
+  if (pt.x < 0 || pt.y < 0 || pt.x > state.planW || pt.y > state.planH) return;
+  e.preventDefault();
+  stage.classList.add('placing');
+  state.page = target;
+  state.armed = true;
+  // point-only: record click position; direction unused
+  state.drag = { type: 'place', pageNo: target, x: pt.x, y: pt.y, moved: false };
+  try { stage.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+  hideTip();
+  renderList();
+  syncListSel(true);
+  renderInspector();
+  renderHint();
+  renderDraft();
+}
+
+function onPointerDown(e) {
+  if (e.target.closest('.hud, .onboard, .planfail, #tip')) return;
+  if (e.button === 2) { beginPan(e); return; }
+  if (e.button === 1 || state.space) { e.preventDefault(); beginPan(e); return; }
+  if (e.button !== 0) return;
+  const camEl = e.target.closest('[data-cam]');
+  if (camEl) {
+    const cam = state.cams.find(c => c.id === camEl.dataset.cam);
+    if (!cam) return;
+    beginMove(e, cam);
+    return;
+  }
+  beginPlace(e);
+}
+
+function onPointerMove(e) {
+  const pt = toImage(e.clientX, e.clientY);
+  updateCoord(pt);
+
+  if (!state.drag) {
+    const camEl = e.target.closest && e.target.closest('[data-cam]');
+    if (camEl) showTip(camEl.dataset.cam, e);
+    else hideTip();
+    return;
+  }
+  const d = state.drag;
+  if (d.type === 'pan') {
+    state.view.tx = d.tx + (e.clientX - d.sx);
+    state.view.ty = d.ty + (e.clientY - d.sy);
+    state.viewTouched = true;
+    applyView();
+    state.views[state.floor] = { ...state.view };
+    return;
+  }
+  if (d.type === 'place') {
+    // drag to fine-tune point before release
+    if (pt.x >= 0 && pt.y >= 0 && pt.x <= state.planW && pt.y <= state.planH) {
+      if (Math.hypot(pt.x - d.x, pt.y - d.y) > 2) d.moved = true;
+      d.x = pt.x; d.y = pt.y;
+    }
+    renderDraft();
+    return;
+  }
+  if (d.type === 'move') {
+    const dx = pt.x - d.start.x, dy = pt.y - d.start.y;
+    let nx = d.ox + dx, ny = d.oy + dy;
+    if (e.shiftKey) { if (Math.abs(dx) > Math.abs(dy)) ny = d.oy; else nx = d.ox; }
+    d.cam.x = +clamp(nx, 0, state.planW).toFixed(1);
+    d.cam.y = +clamp(ny, 0, state.planH).toFixed(1);
+    paintMarker(d.cam);
+    updateCamReadout(d.cam);
+    return;
+  }
+  // rotate disabled for panorama points
+}
+
+function updateCamReadout(cam) {
+  const x = $('#roX'), y = $('#roY');
+  if (x) x.textContent = Math.round(cam.x);
+  if (y) y.textContent = Math.round(cam.y);
+}
+
+function onPointerUp(e) {
+  const d = state.drag;
+  if (!d) return;
+  state.drag = null;
+  stage.classList.remove('panning');
+  stage.classList.remove('placing');
+  try { stage.releasePointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+
+  if (d.type === 'place') {
+    draftLayer.innerHTML = '';
+    commitPlace(d);
+    return;
+  }
+  if (d.type === 'move' || d.type === 'rotate') {
+    saveNow();
+    renderInspector();
+    renderMarkers();
+    renderList();
+    return;
+  }
+  if (d.type === 'pan') {
+    saveNow();
+  }
+}
+
+function onWheel(e) {
+  e.preventDefault();
+  const factor = Math.exp(-clamp(e.deltaY, -120, 120) * 0.0018);
+  zoomAt(e.clientX, e.clientY, factor);
+}
+
+function updateCoord(pt) {
+  if (!coordEl) return;
+  const x = Math.round(pt.x), y = Math.round(pt.y);
+  const nx = state.planW ? Math.round(pt.x / state.planW * 100) : 0;
+  const ny = state.planH ? Math.round(pt.y / state.planH * 100) : 0;
+  coordEl.innerHTML = `<span>x <b>${x}</b></span><span>y <b>${y}</b></span><span><b>${nx}%</b> · <b>${ny}%</b></span>`;
+}
+
+function showTip(id, e) {
+  const cam = state.cams.find(c => c.id === id);
+  if (!cam) { hideTip(); return; }
+  const p = PAGE_BY_NO.get(cam.pages[0]);
+  const r = stageRect();
+  tipEl.innerHTML = `<b>${esc(srcLabel(cam.pages[0]))}</b> ${esc(p ? p.room : '')}${cam.pages.length > 1 ? ` +${cam.pages.length - 1}` : ''}
+    <span>${esc(p ? p.view : '')}</span>
+    <span>点位 (${Math.round(cam.x)}, ${Math.round(cam.y)})${cam.locked ? ' · 已锁定' : ''}</span>`;
+  tipEl.style.left = (e.clientX - r.left) + 'px';
+  tipEl.style.top = (e.clientY - r.top - 14) + 'px';
+  tipEl.classList.add('show');
+}
+function hideTip() { tipEl.classList.remove('show'); }
+
+/* =========================================================
+   14. 快捷键 / 全局事件
+   ========================================================= */
+function isTyping() {
+  const el = document.activeElement;
+  return el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable);
+}
+
+function onKeyDown(e) {
+  const ctrl = e.ctrlKey || e.metaKey;
+  if (ctrl && e.key.toLowerCase() === 'z') {
+    e.preventDefault();
+    if (e.shiftKey) redo(); else undo();
+    return;
+  }
+  if (ctrl && e.key.toLowerCase() === 'y') { e.preventDefault(); redo(); return; }
+  if (ctrl && e.key.toLowerCase() === 'p') { e.preventDefault(); printPlan(false); return; }
+
+  if (e.key === 'Escape') {
+    if ($('#lightbox').classList.contains('show')) { closeLightbox(); return; }
+    if ($('#modal').classList.contains('show')) { closeModal(); return; }
+    if (state.drag) { cancelDrag(); return; }
+    if (isTyping()) { document.activeElement.blur(); return; }
+    closePage();
+    return;
+  }
+
+  if ($('#modal').classList.contains('show') || $('#lightbox').classList.contains('show')) return;
+  if (isTyping()) return;
+
+  if (e.key === '/' ) { e.preventDefault(); searchEl.focus(); searchEl.select(); return; }
+  if (e.key === '?') { e.preventDefault(); openHelp(); return; }
+  switch (e.key.toLowerCase()) {
+    case 'f': e.preventDefault(); fitView(); break;
+    case 'l': e.preventDefault(); toggleLabels(); break;
+    case 'w': e.preventDefault(); toggleWedges(); break;
+    case 'n': {
+      e.preventDefault();
+      const p = PAGES.find(x => !camForPage(x.no));
+      if (p) openPage(p.no); else toast('全部已标注完成');
+      break;
+    }
+    case 'q': case 'e': { /* panorama: no heading nudge */ break; }
+    case '1': case '2': case '3': case '4': {
+      const f = FLOORS[+e.key - 1];
+      if (f) { setFloor(f.id); scrollToFloor(f.id); }
+      break;
+    }
+    case 'delete': case 'backspace': {
+      if (selectedCam()) { e.preventDefault(); deleteSelected(); }
+      break;
+    }
+    case 'arrowleft': case 'arrowright': case 'arrowup': case 'arrowdown': {
+      const cam = selectedCam();
+      if (!cam) break;
+      e.preventDefault();
+      const step = e.shiftKey ? 10 : 1;
+      if (e.key === 'ArrowLeft') cam.x = clamp(cam.x - step, 0, state.planW);
+      if (e.key === 'ArrowRight') cam.x = clamp(cam.x + step, 0, state.planW);
+      if (e.key === 'ArrowUp') cam.y = clamp(cam.y - step, 0, state.planH);
+      if (e.key === 'ArrowDown') cam.y = clamp(cam.y + step, 0, state.planH);
+      if (!e.repeat) snapshot();
+      saveSoon();
+      paintMarker(cam);
+      updateCamReadout(cam);
+      break;
+    }
+    case 'pageup': goPage(-1); break;
+    case 'pagedown': goPage(1); break;
+    case ',': goPage(-1); break;
+    case '.': goPage(1); break;
+    case '+': case '=': zoomCenter(1.2); break;
+    case '-': zoomCenter(1 / 1.2); break;
+  }
+}
+
+function onKeyUp(e) {
+  if (e.code === 'Space') { state.space = false; stage.classList.remove('space'); }
+}
+
+function cancelDrag() {
+  const d = state.drag;
+  if (!d) return;
+  if (d.type === 'place') {
+    draftLayer.innerHTML = '';
+    state.armed = true;
+  }
+  state.drag = null;
+  stage.classList.remove('panning');
+  stage.classList.remove('placing');
+  renderHint();
+}
+
+function toggleLabels() {
+  state.prefs.labels = !state.prefs.labels;
+  $('#btnLabels').classList.toggle('on', state.prefs.labels);
+  renderMarkers();
+  saveSoon();
+}
+function toggleWedges() {
+  state.prefs.wedges = !state.prefs.wedges;
+  $('#btnWedges').classList.toggle('on', state.prefs.wedges);
+  renderMarkers();
+  saveSoon();
+}
+
+function scrollToFloor(id) {
+  const p = PAGES.find(x => sectionFloor(x) === id);
+  if (!p) return;
+  const row = listEl.querySelector(`.row[data-page="${p.no}"]`);
+  if (!row) return;
+  let head = row.previousElementSibling;
+  while (head && !head.classList.contains('ghead')) head = head.previousElementSibling;
+  (head || row).scrollIntoView({ block: 'start' });
+}
+
+/* =========================================================
+   15. 弹窗 / 帮助 / 关联
+   ========================================================= */
+let modalCancel = null;
+function openModal(html, opts = {}) {
+  const box = $('#modalBox');
+  box.className = 'box' + (opts.narrow ? ' narrow' : '');
+  box.innerHTML = html;
+  $('#modal').classList.add('show');
+  $('#modal').setAttribute('aria-hidden', 'false');
+  const x = box.querySelector('.x');
+  if (x) x.onclick = closeModal;
+  if (opts.onMount) opts.onMount(box);
+}
+function closeModal() {
+  const cancel = modalCancel;
+  modalCancel = null;
+  $('#modal').classList.remove('show');
+  $('#modal').setAttribute('aria-hidden', 'true');
+  $('#modalBox').innerHTML = '';
+  if (cancel) { try { cancel(); } catch (e) { /* ignore */ } }
+}
+
+function confirmDialog({ title, body, ok = '确定', cancel = '取消', danger = false }) {
+  return new Promise(resolve => {
+    let settled = false;
+    const finish = v => {
+      if (settled) return;
+      settled = true;
+      modalCancel = null;
+      closeModal();
+      resolve(v);
+    };
+    openModal(`<div class="mhead"><h3>${esc(title)}</h3><button class="x" aria-label="关闭"><svg class="i"><use href="#ico-close"/></svg></button></div>
+      <div class="mbody">${body}</div>
+      <div class="mfoot"><button class="btn" data-act="cancel">${esc(cancel)}</button><button class="btn ${danger ? 'danger' : 'primary'}" data-act="ok">${esc(ok)}</button></div>`,
+      {
+        narrow: true,
+        onMount(box) {
+          box.querySelector('[data-act="cancel"]').onclick = () => finish(false);
+          box.querySelector('[data-act="ok"]').onclick = () => finish(true);
+        }
+      });
+    modalCancel = () => finish(false);
+  });
+}
+
+function assetRoots() {
+  const dirs = [];
+  const seen = new Set();
+  const add = (file) => {
+    const parts = String(file || '').split('/');
+    const part = parts.length > 1 ? parts[0] : '';
+    if (!part || seen.has(part)) return;
+    seen.add(part);
+    dirs.push(part);
+  };
+  FLOORS.forEach(f => add(f.plan));
+  PAGES.forEach(p => add(p.file));
+  return dirs;
+}
+
+function openHelp() {
+  openModal(`<div class="mhead"><h3>使用说明</h3><button class="x" aria-label="关闭"><svg class="i"><use href="#ico-close"/></svg></button></div>
+  <div class="mbody">
+    <h4>三步标注</h4>
+    <ol style="padding-left:18px;margin:0 0 12px">
+      <li>在左侧清单里选一张全景（右侧立即显示画面）。</li>
+      <li>在平面图上<b>单击</b>：在平面落下全景点位；按住拖动可微调落点。实景全景不需要朝向。</li>
+      <li>松开即完成，并自动跳到下一张未标注的全景。一层标完会自动切到下一层。</li>
+    </ol>
+    <h4>可以做的调整</h4>
+    <ul>
+      <li>拖动圆点移动全景点位；按住 Shift 可锁定水平/垂直。</li>
+      <li>右侧可查看点位坐标；实景全景不使用方位角与视场角。</li>
+      <li>同一位置的重复图（如 p026 与 p023）可“+ 关联”到一个点位，只标一次。</li>
+      <li>点位可锁定，避免误拖动；删除后可用 Ctrl+Z 撤销。</li>
+      <li>标记右上角的小点：琥珀色＝该图空间归属存疑，深绿色＝点位已锁定。</li>
+    </ul>
+    <h4>出图</h4>
+    <p>“导出 → 标注图纸 PNG”把当前楼层的平面图连同点位一起存成图片；如果浏览器因本地文件限制挡住了存图，会自动打开打印视图，在打印对话框里选“另存为 PDF”即可。</p>
+    <p>“打印当前楼层 / PDF”与“打印全部楼层 / PDF”输出的是按纸张自适应缩放的矢量标注页（A4 横向，标题 + 平面 + 点位 + 图例），整张图不会被分页拆开；想印 A3 只要在打印对话框里把纸张改成 A3 即可。</p>
+    <h4>方向与坐标</h4>
+    <p>全景点位只记录平面像素坐标，导出时同时给出 0–1 归一化坐标；实景全景不使用方位角与视场角。</p>
+    <h4>快捷键</h4>
+    <div class="kbdrow"><span><kbd>F</kbd></span><span>适配图纸（整张平面图铺满视图）</span></div>
+    <div class="kbdrow"><span><kbd>空格</kbd> + 拖动</span><span>平移图纸</span></div>
+    <div class="kbdrow"><span><kbd>滚轮</kbd></span><span>以光标为中心缩放</span></div>
+    <div class="kbdrow"><span><kbd>Q</kbd><kbd>E</kbd></span><span>选中点位后 ±5°（加 Shift 为 ±1°）</span></div>
+    <div class="kbdrow"><span><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd></span><span>微移点位 1px（加 Shift 为 10px）</span></div>
+    <div class="kbdrow"><span><kbd>N</kbd></span><span>跳到下一张未标注</span></div>
+    <div class="kbdrow"><span><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd></span><span>切换楼层平面</span></div>
+    <div class="kbdrow"><span><kbd>L</kbd><kbd>W</kbd></span><span>显示/隐藏空间名</span></div>
+    <div class="kbdrow"><span><kbd>Ctrl</kbd>+<kbd>Z</kbd></span><span>撤销（加 Shift 重做）</span></div>
+    <div class="kbdrow"><span><kbd>Delete</kbd></span><span>删除选中点位</span></div>
+    <div class="kbdrow"><span><kbd>/</kbd></span><span>搜索全景</span></div>
+    <div class="kbdrow"><span><kbd>?</kbd></span><span>打开这份说明</span></div>
+    <h4>数据与素材</h4>
+    <p>标注自动保存在本机浏览器（localhost / 文件方式都可用）。换电脑或清理浏览器前，请先“导出 JSON”备份；导出的 Markdown / CSV 可直接用于出图清单或视频分镜。</p>
+    <p>本页按相对路径（base = <span class="mono">${esc(BASE)}</span>）读取${assetRoots().map(d => `<span class="mono">${esc(d)}/</span>`).join('、') || '各素材文件夹'}。如果移动了文件夹或图片没显示，可以重新指定素材文件夹（只读本地，不上传）。</p>
+    <div class="rowactions">
+      <button class="btn" id="helpRelink"><svg class="i"><use href="#ico-folder"/></svg>重新选择素材文件夹</button>
+      <button class="btn" id="helpExport"><svg class="i"><use href="#ico-json"/></svg>导出 JSON 备份</button>
+      <button class="btn danger" id="helpClear" ${state.cams.length ? '' : 'disabled'}><svg class="i"><use href="#ico-trash"/></svg>清空全部标注</button>
+    </div>
+    <p style="margin-top:14px;font-size:10.5px;color:var(--muted)">数据来源：${esc(BOOT.sourcePdf || BOOT.project)}。共 ${FLOORS.length} 张平面、${TOTAL} 张图片（原始资料，不改名不搬动）。本工具只做全景点位标注（不要朝向/视场），不改动任何原图。</p>
+  </div>`, {
+    onMount(box) {
+      box.querySelector('#helpRelink').onclick = () => { closeModal(); $('#fileDir').click(); };
+      box.querySelector('#helpExport').onclick = () => exportJSON();
+      box.querySelector('#helpClear').onclick = () => { closeModal(); clearAllCams(); };
+    }
+  });
+}
+
+function openLinkPicker(cam) {
+  const cands = PAGES.filter(p => sectionFloor(p) === cam.floor && !camForPage(p.no));
+  if (!cands.length) { toast('本层没有其它未标注的全景可关联', 2000); return; }
+  const rows = cands.map(p => `<label class="pickrow">
+      <input type="checkbox" value="${p.no}">
+      <span class="pno3">${esc(srcLabel(p.no))}</span>
+      <span class="pk-room">${esc(p.room)}</span>
+      <span class="pk-view">${esc(p.view)}</span>
+    </label>`).join('');
+  openModal(`<div class="mhead"><h3>关联到本点位</h3><button class="x" aria-label="关闭"><svg class="i"><use href="#ico-close"/></svg></button></div>
+    <div class="mbody">
+      <p style="margin-top:0">同一位置的重复全景可以并到一个点位，只标注一次。下面列出“${esc(floorTitle(cam.floor))}”中尚未标注的全景：</p>
+      <div class="picklist">${rows}</div>
+    </div>
+    <div class="mfoot"><button class="btn" data-act="cancel">取消</button><button class="btn primary" data-act="ok">关联所选</button></div>`, {
+    onMount(box) {
+      box.querySelector('[data-act="cancel"]').onclick = closeModal;
+      box.querySelector('[data-act="ok"]').onclick = () => {
+        const picked = [...box.querySelectorAll('input:checked')].map(i => +i.value);
+        if (!picked.length) { toast('还没有选择'); return; }
+        const taken = picked.filter(n => camForPage(n));
+        if (taken.length) { toast('其中 ' + taken.map(n => srcFile(n)).join('、') + ' 已有点位'); return; }
+        snapshot();
+        cam.pages = [...new Set([...cam.pages, ...picked])].sort((a, b) => a - b);
+        saveSoon();
+        closeModal();
+        renderAll();
+        toast(`已关联 ${picked.length} 张 · 共 ${cam.pages.length} 张`, 2000);
+      };
+    }
+  });
+}
+
+/* =========================================================
+   16. 灯箱
+   ========================================================= */
+const lb = { scale: 1, tx: 0, ty: 0, drag: null, page: null };
+function openLightbox(no) {
+  const p = PAGE_BY_NO.get(no);
+  if (!p) return;
+  lb.page = no; lb.scale = 1; lb.tx = 0; lb.ty = 0;
+  const img = $('#lbImg');
+  img.style.transform = 'translate(0,0) scale(1)';
+  img.src = pageSrc(p);
+  img.alt = `${srcFile(p.no)} ${p.room}`;
+  $('#lbTitle').innerHTML = `${esc(srcFile(p.no))} · ${esc(p.room)} <span class="dim" style="font-weight:400;margin-left:6px">${esc(p.view)}</span>`;
+  $('#lightbox').classList.add('show');
+  $('#lightbox').setAttribute('aria-hidden', 'false');
+}
+function closeLightbox() {
+  $('#lightbox').classList.remove('show');
+  $('#lightbox').setAttribute('aria-hidden', 'true');
+  $('#lbImg').removeAttribute('src');
+}
+function lbReset() {
+  lb.scale = 1; lb.tx = 0; lb.ty = 0;
+  $('#lbImg').style.transform = 'translate(0,0) scale(1)';
+}
+function lbZoom(factor, cx, cy) {
+  const img = $('#lbImg');
+  const r = img.getBoundingClientRect();
+  const ns = clamp(lb.scale * factor, 1, 8);
+  if (ns === lb.scale) return;
+  const ox = cx - (r.left + r.width / 2);
+  const oy = cy - (r.top + r.height / 2);
+  lb.tx = ox - (ox - lb.tx) * (ns / lb.scale);
+  lb.ty = oy - (oy - lb.ty) * (ns / lb.scale);
+  lb.scale = ns;
+  img.style.transform = `translate(${lb.tx}px,${lb.ty}px) scale(${lb.scale})`;
+}
+
+/* =========================================================
+   17. 导入 / 导出
+   ========================================================= */
+function exportJSON() {
+  const data = {
+    schema: SCHEMA_ID,
+    project: BOOT.project,
+    sourcePdf: BOOT.sourcePdf,
+    exportedAt: new Date().toISOString(),
+    note: '实景全景点位：仅记录平面图像素坐标 x/y 与归一化 nx/ny；dir/fov 不使用（为 null）。',
+    floors: FLOORS.map(f => ({
+      id: f.id, title: f.title, name: f.name, plan: BASE + f.plan, w: f.w, h: f.h,
+      cameras: camsOnFloor(f.id).slice().sort((a, b) => a.pages[0] - b.pages[0]).map(c => ({
+        id: c.id,
+        pages: c.pages.slice().sort((a, b) => a - b),
+        primary: c.pages[0],
+        x: +c.x.toFixed(1), y: +c.y.toFixed(1),
+        nx: +(c.x / f.w).toFixed(5), ny: +(c.y / f.h).toFixed(5),
+        dir: null,
+        fov: null,
+        name: c.name || '',
+        note: c.note || '',
+        locked: !!c.locked
+      }))
+    })),
+    pages: PAGES.map(p => {
+      const c = camForPage(p.no);
+      return {
+        no: p.no, floor: sectionFloor(p), room: p.room, view: p.view,
+        conf: p.conf, note: p.note, file: BASE + p.file,
+        camera: c ? c.id : null
+      };
+    })
+  };
+  download(EXPORT_BASE + '-机位标注.json', JSON.stringify(data, null, 2), 'application/json;charset=utf-8');
+  toast('JSON 已导出');
+}
+
+function markedRows() {
+  const rows = [];
+  for (const p of PAGES) {
+    const c = camForPage(p.no);
+    if (!c) continue;
+    const f = FLOOR_BY_ID.get(c.floor);
+    rows.push({
+      no: p.no, room: p.room, view: p.view, conf: p.conf, note: p.note,
+      floor: floorTitle(c.floor), floorId: c.floor,
+      x: Math.round(c.x), y: Math.round(c.y),
+      nx: (c.x / f.w).toFixed(3), ny: (c.y / f.h).toFixed(3),
+      dir: null, fov: null,
+      name: c.name, pages: c.pages
+    });
+  }
+  return rows.sort((a, b) => a.no - b.no);
+}
+
+function exportMarkdown() {
+  const rows = markedRows();
+  const unmarked = PAGES.filter(p => !camForPage(p.no)).length;
+  const now = new Date().toLocaleString('zh-CN');
+  let md = `# ${EXPORT_BASE} · 实景全景点位\n\n`;
+  md += `导出时间：${now}\n\n`;
+  md += `共 ${TOTAL} 张全景，已标注 ${rows.length} 张，未标注 ${unmarked} 张。\n\n`;
+  md += `实景全景点位仅记录落点；nx/ny 为平面图归一化坐标（0-1）。dir/fov 不使用。\n\n`;
+  for (const f of FLOORS) {
+    const fr = rows.filter(r => r.floorId === f.id);
+    md += `## ${f.title} · ${fr.length} 个点位\n\n`;
+    md += `图纸：\`${BASE}${f.plan}\`（${f.w} × ${f.h} px）\n\n`;
+    if (!fr.length) { md += `> 本层尚未标注。\n\n`; continue; }
+    md += `| 文件 | 空间 | 画面主体 | 点位像素 | 归一化 | 点位名 | 备注 |\n|---|---|---|---|---|---|---|\n`;
+    for (const r of fr) {
+      md += `| ${srcFile(r.no)} | ${r.room} | ${r.view.replace(/\|/g, '\\|')} | ${r.x}, ${r.y} | ${r.nx}, ${r.ny} | ${r.name || ''} | ${(r.note || '').replace(/\|/g, '\\|')} |\n`;
+    }
+    md += `\n`;
+  }
+  const todo = PAGES.filter(p => !camForPage(p.no));
+  if (todo.length) {
+    md += `## 未标注清单（${todo.length} 张）\n\n`;
+    md += todo.map(p => `- ${srcFile(p.no)} · ${p.room} · ${p.view}`).join('\n') + '\n';
+  }
+  download(EXPORT_BASE + '-机位标注.md', md, 'text/markdown;charset=utf-8');
+  toast('Markdown 已导出');
+}
+
+function exportCSV() {
+  const rows = markedRows();
+  const head = ['文件', '页码', '楼层', '空间', '画面主体', '置信', 'X', 'Y', '归一化X', '归一化Y', '点位名', '关联页', '备注'];
+  const escCSV = v => {
+    const s = String(v == null ? '' : v);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+  const body = rows.map(r => [
+    srcFile(r.no), 'p' + pad3(r.no), r.floor, r.room, r.view, r.conf, r.x, r.y, r.nx, r.ny, r.name, r.pages.map(n => 'p' + pad3(n)).join(' '), r.note
+  ].map(escCSV).join(','));
+  const csv = '\ufeff' + [head.join(','), ...body].join('\r\n');
+  download(EXPORT_BASE + '-机位标注.csv', csv, 'text/csv;charset=utf-8');
+  toast('CSV 已导出');
+}
+
+function exportSummary() {
+  const rows = markedRows();
+  if (!rows.length) { toast('还没有标注任何点位'); return; }
+  const text = rows.map(r => `${srcLabel(r.no)}｜${r.room}｜${r.floor}｜${r.x},${r.y}（${r.nx},${r.ny}）｜${r.dir}°／${r.fov}°${r.name ? '｜' + r.name : ''}`).join('\n');
+  copyText(text).then(ok => toast(ok ? `已复制 ${rows.length} 条点位摘要` : '复制失败，请改用导出'));
+}
+
+function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text).then(() => true).catch(() => fallbackCopy(text));
+  }
+  return Promise.resolve(fallbackCopy(text));
+}
+function fallbackCopy(text) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    return ok;
+  } catch (e) { return false; }
+}
+
+async function exportPNG() {
+  const f = FLOOR_BY_ID.get(state.floor);
+  const entry = state.planCache[state.floor];
+  if (!entry || !entry.ok || !entry.img || !entry.img.complete) { toast('图纸还没加载完，稍后再试'); return; }
+  const cams = camsOnFloor(f.id).slice().sort((a, b) => a.pages[0] - b.pages[0]);
+  if (!cams.length) { toast('当前楼层还没有点位'); return; }
+  const W = f.w, H = f.h;
+  const pad = Math.round(W * 0.03), head = Math.round(W * 0.085), foot = Math.round(W * 0.05);
+  const cw = W + pad * 2, ch = H + head + foot;
+  const cv = document.createElement('canvas');
+  cv.width = cw; cv.height = ch;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#f6f3ea';
+  ctx.fillRect(0, 0, cw, ch);
+  try {
+    ctx.drawImage(entry.img, pad, head, W, H);
+    ctx.strokeStyle = 'rgba(120,105,80,.3)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(pad + .5, head + .5, W - 1, H - 1);
+
+    const r = Math.max(8, Math.round(W / 170));
+    for (const c of cams) {
+      const x = pad + c.x, y = head + c.y;
+      // panorama point only — no heading cone
+
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = '#2b3034';
+      ctx.fill();
+      ctx.lineWidth = Math.max(1.5, r * .2);
+      ctx.strokeStyle = '#f6f3ea';
+      ctx.stroke();
+
+      ctx.fillStyle = '#fffdf8';
+      ctx.font = `600 ${Math.round(r * .95)}px "Microsoft YaHei",sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String(c.pages[0]), x, y + r * .04);
+
+      const p = PAGE_BY_NO.get(c.pages[0]);
+      if (p && (state.prefs.labels || cams.length <= 24)) {
+        ctx.font = `600 ${Math.round(r * .82)}px "Microsoft YaHei",sans-serif`;
+        ctx.textAlign = 'left';
+        ctx.lineWidth = Math.max(2, r * .32);
+        ctx.strokeStyle = '#f6f3ea';
+        ctx.lineJoin = 'round';
+        ctx.strokeText(p.room, x + r + 3, y - r * .1);
+        ctx.fillStyle = '#22262a';
+        ctx.fillText(p.room, x + r + 3, y - r * .1);
+      }
+    }
+
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#22262a';
+    ctx.font = `600 ${Math.round(W * .024)}px "Microsoft YaHei",sans-serif`;
+    ctx.fillText(`${BOOT.project} · ${f.title} 机位标注`, pad, pad * 1.35);
+    ctx.fillStyle = '#8a8b82';
+    ctx.font = `${Math.round(W * .011)}px "Microsoft YaHei",sans-serif`;
+    ctx.fillText(`${cams.length} 个点位 · ${pTodate()} · 圆点为全景点位（实景全景，无朝向/视场）`, pad, pad * 1.35 + W * .03);
+    ctx.fillStyle = '#8a8b82';
+    ctx.font = `${Math.round(W * .0095)}px "Microsoft YaHei",sans-serif`;
+    ctx.fillText(`图纸：${f.plan}（${W} × ${H} px）`, pad, ch - pad * .55);
+
+    const blob = await new Promise(res => cv.toBlob(res, 'image/png'));
+    if (!blob) throw new Error('empty');
+    download(`${EXPORT_BASE}-${f.title.replace(/\s+/g, '')}-点位图.png`, blob);
+    toast('标注图纸已导出');
+  } catch (err) {
+    toast('本地文件模式禁止直接存图：已打开打印视图，请选择“另存为 PDF”', 4600);
+    setTimeout(printPlan, 350);
+  }
+}
+
+/* -------------------------------------------------------------------------
+   打印版：整张标注图（标题 + 平面 + 点位 + 图例）做在**一个** SVG 里。
+   这样平面位图和点位永远在同一坐标系里一起缩放，不会被浏览器按页拆开。
+   viewBox 固定 4000×2700（1.481），A4/A3 横向都能整页放下。
+   ------------------------------------------------------------------------- */
+const PS = { w: 4000, h: 2700, pad: 64, head: 190, foot: 180, pin: 30, label: 32, cone: 112, ray: 138 };
+
+function printMarkerSVG(cam, x, y, showLabel) {
+  const p = PAGE_BY_NO.get(cam.pages[0]);
+  const room = p ? p.room : '';
+  const label = showLabel && room
+    ? `<text x="16" y="4" font-size="13" fill="#2b3034" font-family="system-ui,sans-serif">${esc(room)}</text>` : '';
+  return `<g transform="translate(${f2(x)} ${f2(y)})">
+    <circle r="12" fill="rgba(255,253,248,.95)" stroke="rgba(176,84,60,.55)" stroke-width="1.2"/>
+    <circle r="8.5" fill="#b0543c"/>
+    <text y="3.5" text-anchor="middle" font-size="9" fill="#fffdf8" font-family="ui-monospace,monospace">${srcNum(cam.pages[0])}</text>
+    ${label}
+  </g>`;
+}
+
+function buildPrintSheet(floorId = state.floor, append = false) {
+  const f = FLOOR_BY_ID.get(floorId) || FLOOR_BY_ID.get(state.floor);
+  const cams = camsOnFloor(f.id).slice().sort((a, b) => a.pages[0] - b.pages[0]);
+  const W = f.w, H = f.h;
+  const box = { x: PS.pad, y: PS.head, w: PS.w - PS.pad * 2, h: PS.h - PS.head - PS.foot };
+  const s = Math.min(box.w / W, box.h / H);
+  const pw = W * s, ph = H * s;
+  const px = box.x + (box.w - pw) / 2;
+  const py = box.y + (box.h - ph) / 2;
+
+  // 标签避让（在版面坐标系里算，密集点位不会糊成一片）
+  const labelBoxes = [];
+  const showLabel = new Set();
+  for (const c of cams) {
+    const p = PAGE_BY_NO.get(c.pages[0]);
+    if (!p || !p.room) continue;
+    const cx = px + c.x * s, cy = py + c.y * s;
+    const b = { x1: cx + PS.pin + 14, y1: cy - 19, x2: cx + PS.pin + 14 + textWidth(p.room, PS.label), y2: cy + 19 };
+    if (labelBoxes.some(x => boxHit(x, b))) continue;
+    labelBoxes.push(b);
+    showLabel.add(c.id);
+  }
+
+  if (!append) {
+    document.querySelectorAll('.print-sheet').forEach(s => s.remove());
+  }
+  const sheet = document.createElement('div');
+  sheet.className = 'print-sheet' + (append ? ' ps-next' : '');
+  if (!append) sheet.id = 'printSheet';
+  sheet.innerHTML = `<svg class="ps-svg" viewBox="0 0 ${PS.w} ${PS.h}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${PS.w}" height="${PS.h}" fill="#ffffff"/>
+    <text x="${PS.pad}" y="114" font-size="62" font-weight="600" fill="#22262a">${esc(BOOT.project)} · ${esc(f.title)} 机位标注</text>
+    <text x="${PS.w - PS.pad}" y="110" text-anchor="end" font-size="34" fill="#77786f">${cams.length} 个点位 · ${pTodate()} · 图纸 ${W} × ${H} px</text>
+    <line x1="${PS.pad}" y1="158" x2="${PS.w - PS.pad}" y2="158" stroke="#22262a" stroke-width="2"/>
+    <g transform="translate(${f2(px)} ${f2(py)}) scale(${s.toFixed(5)})">
+      <image href="${esc(planSrc(f))}" width="${W}" height="${H}" preserveAspectRatio="none"/>
+    </g>
+    <rect x="${f2(px)}" y="${f2(py)}" width="${f2(pw)}" height="${f2(ph)}" fill="none" stroke="#b7b1a3" stroke-width="1.5"/>
+    ${cams.map(c => printMarkerSVG(c, px + c.x * s, py + c.y * s, showLabel.has(c.id))).join('')}
+    <line x1="${PS.pad}" y1="${PS.h - PS.foot + 26}" x2="${PS.w - PS.pad}" y2="${PS.h - PS.foot + 26}" stroke="#ddd7c9" stroke-width="1.5"/>
+    <text x="${PS.pad}" y="${PS.h - 46}" font-size="30" fill="#6f7068">圆点为全景点位；实景全景仅标落点，无朝向与视场角。</text>
+    <text x="${PS.w - PS.pad}" y="${PS.h - 46}" text-anchor="end" font-size="27" fill="#93948b">${esc(BASE + f.plan)}</text>
+  </svg>`;
+  document.body.appendChild(sheet);
+  document.body.classList.add('printing');
+  return sheet;
+}
+
+function printPlan(allFloors = false) {
+  if (allFloors) {
+    if (!FLOORS.some(f => camsOnFloor(f.id).length)) { toast('还没有标注任何点位', 1800); return; }
+  } else if (!camsOnFloor(state.floor).length) {
+    toast(`“${floorTitle(state.floor)}”还没有点位，换个楼层再打印`, 2400);
+    return;
+  }
+  const targets = allFloors
+    ? FLOORS.filter(f => camsOnFloor(f.id).length)
+    : [FLOOR_BY_ID.get(state.floor)];
+  const list = targets.length ? targets : [FLOOR_BY_ID.get(state.floor)];
+  list.forEach((f, i) => buildPrintSheet(f.id, i > 0));
+
+  const srcs = list.map(f => planSrc(f));
+  let pending = srcs.length;
+  let fired = false;
+  const go = () => {
+    if (fired) return;
+    fired = true;
+    setTimeout(() => { try { window.print(); } catch (e) { /* 忽略 */ } }, 320);
+  };
+  srcs.forEach(src => {
+    let counted = false;
+    const done = () => {
+      if (counted) return;
+      counted = true;
+      if (--pending <= 0) go();
+    };
+    const pre = new Image();
+    pre.onload = done;
+    pre.onerror = done;
+    pre.src = src;
+    if (pre.complete && pre.naturalWidth) done();
+  });
+  setTimeout(go, 3000);
+
+  setTimeout(() => {
+    document.querySelectorAll('.print-sheet').forEach(s => s.remove());
+    document.body.classList.remove('printing');
+  }, 60000);
+}
+
+function pTodate() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+async function importJSON(file) {
+  let raw;
+  try { raw = await file.text(); } catch (e) { toast('文件读取失败'); return; }
+  let obj;
+  try { obj = JSON.parse(raw); } catch (e) { toast('不是有效的 JSON 文件'); return; }
+  const cams = normalizeImport(obj);
+  if (!cams.length) { toast('文件里没有可识别的点位数据'); return; }
+  if (state.cams.length) {
+    const ok = await confirmDialog({
+      title: '导入点位',
+      body: `<p>当前已有 <b>${state.cams.length}</b> 个点位，导入文件包含 <b>${cams.length}</b> 个点位。</p>
+        <p>继续将<b>替换</b>当前标注（导入后可用 Ctrl+Z 撤销）。建议先导出当前 JSON 备份。</p>`,
+      ok: '替换并导入'
+    });
+    if (!ok) return;
+  }
+  mutate(() => {
+    state.cams = cams;
+    state.page = null;
+    state.armed = false;
+  });
+  saveNow();
+  renderAll();
+  toast(`已导入 ${cams.length} 个点位`, 2600);
+}
+
+function normalizeImport(obj) {
+  const list = [];
+  if (Array.isArray(obj.floors)) {
+    for (const fl of obj.floors) {
+      const fid = fl.id === 'landscape' ? DEFAULT_FLOOR : fl.id;
+      const f = FLOOR_BY_ID.get(fid);
+      const arr = fl.cameras || fl.cams || [];
+      for (const c of arr) list.push(Object.assign({}, c, { floor: fid, __f: f }));
+    }
+  }
+  if (Array.isArray(obj.cams)) {
+    for (const c of obj.cams) list.push(c);
+  }
+  const mapped = list.map(c => {
+    const fid = c.floor === 'landscape' ? DEFAULT_FLOOR : (FLOOR_BY_ID.has(c.floor) ? c.floor : null);
+    const f = c.__f || (fid ? FLOOR_BY_ID.get(fid) : null);
+    let pages = Array.isArray(c.pages) ? c.pages.map(Number) : null;
+    if (!pages) pages = c.primary != null ? [Number(c.primary)] : (c.no != null ? [Number(c.no)] : []);
+    let x = c.x, y = c.y;
+    if ((x == null || y == null) && c.nx != null && c.ny != null && f) { x = c.nx * f.w; y = c.ny * f.h; }
+    let dir = c.dir != null ? c.dir : c.bearing;
+    if (dir == null && c.lx != null && c.ly != null && x != null) dir = dirFromVec(c.lx - x, c.ly - y);
+    return Object.assign({}, c, { pages, x, y, dir: dir || 0, floor: c.floor });
+  }).filter(c => c.pages.length && isFinite(c.x) && isFinite(c.y));
+  return sanitizeCams(mapped);
+}
+
+function connectFolder(fileList) {
+  const map = new Map();
+  for (const f of fileList) {
+    if (/\.(jpe?g|png|webp|gif|bmp)$/i.test(f.name)) map.set(f.name, f);
+  }
+  if (!map.size) { toast('这个文件夹里没有图片文件'); return; }
+  for (const u of state.blobUrls.values()) { try { URL.revokeObjectURL(u); } catch (e) { /* ignore */ } }
+  state.blobUrls.clear();
+  state.blobMap = map;
+  state.planCache = {};
+  planImg.removeAttribute('src');
+  planFail.hidden = true;
+  loadPlan(state.floor, ok => {
+    if (ok) {
+      if (state.views[state.floor]) { state.view = { ...state.views[state.floor] }; }
+      fitView();
+      renderAll();
+      toast(`素材已连接：${map.size} 个图片文件`, 2400);
+    }
+  });
+}
+
+/* =========================================================
+   18. 绑定 / 初始化
+   ========================================================= */
+function bindUI() {
+  stage.addEventListener('pointerdown', onPointerDown);
+  stage.addEventListener('pointermove', onPointerMove);
+  stage.addEventListener('pointerup', onPointerUp);
+  stage.addEventListener('pointercancel', onPointerUp);
+  stage.addEventListener('pointerleave', () => { if (!state.drag) hideTip(); });
+  stage.addEventListener('wheel', onWheel, { passive: false });
+  stage.addEventListener('contextmenu', e => e.preventDefault());
+  // 平面图上禁止原生“选中文字/拖拽元素”：拖动点位时被浏览器抢走手势就是这么来的
+  stage.addEventListener('dragstart', e => e.preventDefault());
+  stage.addEventListener('selectstart', e => e.preventDefault());
+  stage.addEventListener('auxclick', e => { if (e.button === 1) e.preventDefault(); });
+
+  document.addEventListener('keydown', onKeyDown);
+  document.addEventListener('keyup', onKeyUp);
+  window.addEventListener('resize', () => {
+    if (!state.planW) return;
+    if (!state.viewTouched) fitView();
+    else { clampView(); applyView(); }
+  });
+  new ResizeObserver(() => {
+    if (!state.planW) return;
+    if (!state.viewTouched) fitView();
+    else { clampView(); applyView(); }
+  }).observe(stage);
+
+  $('#btnUndo').onclick = undo;
+  $('#btnRedo').onclick = redo;
+  $('#btnFit').onclick = () => { fitView(); toast('已适配图纸', 1000); };
+  $('#btnZoomIn').onclick = () => zoomCenter(1.25);
+  $('#btnZoomOut').onclick = () => zoomCenter(1 / 1.25);
+  $('#btnZoomFit').onclick = () => fitView();
+  $('#btnHelp').onclick = openHelp;
+  $('#btnLabels').onclick = toggleLabels;
+  $('#btnWedges').onclick = toggleWedges;
+  $('#btnImport').onclick = () => $('#fileJson').click();
+  $('#btnClear').onclick = () => clearAllCams();
+  $('#fileJson').onchange = e => {
+    const f = e.target.files[0];
+    if (f) importJSON(f);
+    e.target.value = '';
+  };
+  $('#fileDir').onchange = e => {
+    connectFolder(e.target.files);
+    e.target.value = '';
+  };
+  $('#btnRelinkFail').onclick = () => $('#fileDir').click();
+
+  $('#exportMenu').addEventListener('click', e => {
+    const b = e.target.closest('[data-export]');
+    if (!b) return;
+    $('#exportMenu').classList.remove('show');
+    const k = b.dataset.export;
+    if (k === 'json') exportJSON();
+    else if (k === 'md') exportMarkdown();
+    else if (k === 'csv') exportCSV();
+    else if (k === 'png') exportPNG();
+    else if (k === 'print') printPlan(false);
+    else if (k === 'printAll') printPlan(true);
+    else if (k === 'clip') exportSummary();
+  });
+  $('#btnExport').onclick = e => {
+    e.stopPropagation();
+    $('#exportMenu').classList.toggle('show');
+  };
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.menu-wrap')) $('#exportMenu').classList.remove('show');
+  });
+
+  floorTabs.addEventListener('click', e => {
+    const b = e.target.closest('[data-floor]');
+    if (!b) return;
+    setFloor(b.dataset.floor);
+    scrollToFloor(b.dataset.floor);
+    state.prefs.floor = b.dataset.floor;
+    saveSoon();
+  });
+  filtersEl.addEventListener('click', e => {
+    const b = e.target.closest('[data-filter]');
+    if (!b) return;
+    state.filter = b.dataset.filter;
+    renderList();
+  });
+  $('#sortSeg').addEventListener('click', e => {
+    const b = e.target.closest('[data-sort]');
+    if (!b) return;
+    state.sort = b.dataset.sort;
+    document.querySelectorAll('#sortSeg button').forEach(x => x.classList.toggle('on', x === b));
+    renderList();
+  });
+  searchEl.addEventListener('input', () => {
+    state.q = searchEl.value;
+    renderList();
+  });
+  listEl.addEventListener('click', e => {
+    const row = e.target.closest('[data-page]');
+    if (!row) return;
+    openPage(+row.dataset.page);
+    if (window.matchMedia('(max-width:980px)').matches) $('#leftPanel').classList.remove('show');
+  });
+
+  // 灯箱
+  $('#lbClose').onclick = closeLightbox;
+  $('#lbPrev').onclick = () => { if (lb.page != null) { goPage(-1); openLightbox(state.page); } };
+  $('#lbNext').onclick = () => { if (lb.page != null) { goPage(1); openLightbox(state.page); } };
+  $('#lightbox').addEventListener('click', e => { if (e.target === $('#lightbox')) closeLightbox(); });
+  $('#modal').addEventListener('click', e => { if (e.target === $('#modal')) closeModal(); });
+  const lbWrap = $('#lbWrap');
+  lbWrap.addEventListener('wheel', e => { e.preventDefault(); lbZoom(e.deltaY < 0 ? 1.15 : 1 / 1.15, e.clientX, e.clientY); }, { passive: false });
+  lbWrap.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    lb.drag = { x: e.clientX, y: e.clientY, tx: lb.tx, ty: lb.ty, moved: 0, onImg: e.target === $('#lbImg') };
+    lbWrap.classList.add('drag');
+    try { lbWrap.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+  });
+  lbWrap.addEventListener('pointermove', e => {
+    if (!lb.drag) return;
+    lb.drag.moved = Math.max(lb.drag.moved, Math.abs(e.clientX - lb.drag.x) + Math.abs(e.clientY - lb.drag.y));
+    lb.tx = lb.drag.tx + (e.clientX - lb.drag.x);
+    lb.ty = lb.drag.ty + (e.clientY - lb.drag.y);
+    $('#lbImg').style.transform = `translate(${lb.tx}px,${lb.ty}px) scale(${lb.scale})`;
+  });
+  const endLb = () => {
+    if (lb.drag) lb.lastGesture = lb.drag;
+    lb.drag = null;
+    lbWrap.classList.remove('drag');
+  };
+  lbWrap.addEventListener('pointerup', endLb);
+  lbWrap.addEventListener('pointercancel', endLb);
+  // 点击图片以外的空白处关闭（拖拽过则不触发）
+  lbWrap.addEventListener('click', e => {
+    const g = lb.lastGesture;
+    if (!g || g.onImg || g.moved > 8) return;
+    if (e.target !== lbWrap) return;
+    closeLightbox();
+  });
+  lbWrap.addEventListener('dblclick', lbReset);
+
+  // 拖放 JSON
+  let dragDepth = 0;
+  window.addEventListener('dragenter', e => {
+    if (!e.dataTransfer || ![...e.dataTransfer.types].includes('Files')) return;
+    dragDepth++;
+    $('#dropzone').classList.add('show');
+  });
+  window.addEventListener('dragover', e => e.preventDefault());
+  window.addEventListener('dragleave', () => { dragDepth = Math.max(0, dragDepth - 1); if (!dragDepth) $('#dropzone').classList.remove('show'); });
+  window.addEventListener('drop', e => {
+    e.preventDefault();
+    dragDepth = 0;
+    $('#dropzone').classList.remove('show');
+    const f = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f && /\.json$/i.test(f.name)) importJSON(f);
+    else if (f) toast('只支持导入 JSON 标注文件');
+  });
+
+  // 移动端抽屉
+  const btnInspect = $('#btnInspect'), rightPanel = $('#rightPanel');
+  if (btnInspect) btnInspect.onclick = () => rightPanel.classList.toggle('show');
+  const btnPages = $('#btnPages'), leftPanel = $('#leftPanel');
+  if (btnPages) btnPages.onclick = () => leftPanel.classList.toggle('show');
+  const btnCloseInspect = $('#btnCloseInspect');
+  if (btnCloseInspect) btnCloseInspect.onclick = () => rightPanel.classList.remove('show');
+
+  window.addEventListener('beforeunload', saveNow);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) saveNow(); });
+  window.addEventListener('blur', () => { state.space = false; stage.classList.remove('space'); });
+
+  // 空格平移
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' && !isTyping()) {
+      state.space = true;
+      stage.classList.add('space');
+      e.preventDefault();
+    }
+  });
+}
+
+function applyPrefs() {
+  $('#btnLabels').classList.toggle('on', state.prefs.labels);
+  $('#btnWedges').classList.toggle('on', state.prefs.wedges);
+  document.querySelectorAll('#sortSeg button').forEach(b => b.classList.toggle('on', b.dataset.sort === state.sort));
+  applyRightW();
+}
+
+function init() {
+  $('#totalCount').textContent = TOTAL;
+  loadSaved();
+  bindUI();
+  state.floor = FLOOR_BY_ID.has(state.prefs.floor) ? state.prefs.floor : DEFAULT_FLOOR;
+  applyPrefs();
+  renderCounts();
+  renderFloorTabs();
+  setFloor(state.floor, { fit: true });
+  renderAll();
+  updateHistoryButtons();
+
+  // 接着上次的位置继续（页码合法才恢复）
+  const last = state.prefs.page;
+  if (last != null && PAGE_BY_NO.has(last)) openPage(last, { silent: true });
+}
+
+// 供调试 / 自动化测试使用（不参与界面）
+window.__tool = {
+  get state() { return state; },
+  openPage, setFloor, fitView, exportJSON, exportMarkdown, exportCSV, renderAll,
+  buildPrintSheet, printPlan, importJSON,
+  get cams() { return state.cams; },
+  place(no, x, y, dir) {
+    const p = PAGE_BY_NO.get(no);
+    if (!p) return null;
+    setFloor(sectionFloor(p));
+    state.page = no; state.armed = true;
+    const cam = { id: 'c' + no, pages: [no], floor: state.floor, x, y, dir, fov: 65, name: '', note: '', locked: false };
+    mutate(() => { state.cams.push(cam); state.armed = false; });
+    renderAll();
+    return cam;
+  }
+};
+
+/* =========================================================
+   右栏宽度可拖拽（2026-10-30 加）
+   拖动右栏左边缘调宽；宽度记进 prefs.rightW，跟 localStorage 一起持久化。
+   ========================================================= */
+const R_MIN_W = 320;
+const R_MAX_W = 760;
+function rightPanelEl() { return document.getElementById('rightPanel'); }
+function wsEl() { return document.querySelector('.workspace'); }
+function clampRightW(w) {
+  const room = window.innerWidth - 300 - 320;      // 左侧面板 + 平面图最小可视宽度
+  return Math.round(clamp(w, R_MIN_W, Math.max(R_MIN_W, Math.min(R_MAX_W, room))));
+}
+function applyRightW() {
+  // 注意：--right-w 要设在 .workspace 上（网格列宽与浮层宽度都从那里读），设在右栏自己身上不生效
+  const ws = wsEl();
+  if (!ws) return;
+  if (state.prefs.rightW) ws.style.setProperty('--right-w', clampRightW(state.prefs.rightW) + 'px');
+  else ws.style.removeProperty('--right-w');       // 没记过就回到 CSS 默认值
+}
+function bindRightResize() {
+  const hand = document.getElementById('rHand'), panel = rightPanelEl();
+  if (!hand || !panel) return;
+  let drag = null;
+  hand.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    drag = { x: e.clientX, w: panel.getBoundingClientRect().width };
+    hand.classList.add('on');
+    document.body.classList.add('rresize');
+    try { hand.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    e.preventDefault();
+  });
+  hand.addEventListener('pointermove', e => {
+    if (!drag) return;
+    wsEl().style.setProperty('--right-w', clampRightW(drag.w - (e.clientX - drag.x)) + 'px');
+  });
+  const end = () => {
+    if (!drag) return;
+    drag = null;
+    hand.classList.remove('on');
+    document.body.classList.remove('rresize');
+    state.prefs.rightW = Math.round(panel.getBoundingClientRect().width);
+    saveSoon();
+  };
+  hand.addEventListener('pointerup', end);
+  hand.addEventListener('pointercancel', end);
+  hand.addEventListener('dblclick', () => { delete state.prefs.rightW; applyRightW(); saveSoon(); });
+  window.addEventListener('resize', () => { if (state.prefs.rightW) applyRightW(); });
+}
+bindRightResize();
+
+init();
+})();
+
+</script>
+</body>
+</html>

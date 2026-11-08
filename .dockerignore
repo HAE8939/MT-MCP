@@ -1,0 +1,11 @@
+node_modules
+dist
+.git
+.env
+.env.*
+secrets
+tests
+# Root docs only. Do not widen this to **/*.md: the design-prompts pack
+# reads Markdown from src/packs/design-prompts/prompts/ during the image build.
+/*.md
+*.log
